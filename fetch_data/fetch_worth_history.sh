@@ -8,4 +8,6 @@ fi
 data=`curl $1 | grep marktwertverlauf`
 IFS=\" arr=(${data})
 data=${arr[1]}
-echo $data
+# echo $data
+
+bash fetch_worth.sh https://www.transfermarkt.jp$data
