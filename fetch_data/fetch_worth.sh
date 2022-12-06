@@ -4,8 +4,8 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+# url例: https://www.transfermarkt.jp/aaron-ramsdale/marktwertverlauf/spieler/427568
 data=`curl $1 | grep series`
-# data=`curl https://www.transfermarkt.jp/aaron-ramsdale/marktwertverlauf/spieler/427568 | grep series`
 IFS=\[ arr=(${data})
 data=${arr[2]}
 IFS=\] arr=(${data})
