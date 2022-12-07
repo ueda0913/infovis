@@ -1,102 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta charset="utf-8" />
-    <title>D3 Test</title>
-    <script type="text/javascript" src="./d3.min.js"></script>
-    <style>
-      .tooltip {
-        position: absolute;
-        text-align: left;
-        width: auto;
-        height: auto;
-        padding: 5px;
-        font: 12px;
-        background: white;
-        -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-        -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-        visibility: hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
-      var width = 1300;
-      var height = 600;
-      var offset = 40; //固定
-      var svg = d3
-        .select("body")
-        .append("svg")
-        .attr("width", width + 2 * offset)
-        .attr("height", height + 2 * offset);
-      // .attr("width", width / 2 )
-      // .attr("height", height + offset * 2);
 
-      var flame1 = svg.append("rect");
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8" />
+  <title>D3 Test</title>
+  <script type="text/javascript" src="./d3.min.js"></script>
+  <style>
+    .tooltip {
+      position: absolute;
+      text-align: left;
+      width: auto;
+      height: auto;
+      padding: 5px;
+      font: 12px;
+      background: white;
+      -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      visibility: hidden;
+    }
+  </style>
+</head>
 
-      flame1
-        .attr("x", offset)
-        .attr("y", offset)
-        .attr("height", height)
-        .attr("width", width / 2 - 40)
-        .attr("fill", "white")
-        .attr("stroke-width", 1)
-        .attr("stroke", "black");
+<body>
+  <script type="text/javascript">
+    var width = 1300;
+    var height = 600;
+    var offset = 40; //固定
+    var svg = d3
+      .select("body")
+      .append("svg")
+      .attr("width", width + 2 * offset)
+      .attr("height", height + 2 * offset);
+    // .attr("width", width / 2 )
+    // .attr("height", height + offset * 2);
 
-      var flame2 = svg.append("rect");
+    var flame1 = svg.append("rect");
 
-      flame2
-        .attr("x", offset + width / 2)
-        .attr("y", offset)
-        .attr("height", height)
-        .attr("width", width / 2)
-        .attr("fill", "white")
-        .attr("stroke-width", 1)
-        .attr("stroke", "black");
+    flame1
+      .attr("x", offset)
+      .attr("y", offset)
+      .attr("height", height)
+      .attr("width", width / 2 - 40)
+      .attr("fill", "white")
+      .attr("stroke-width", 1)
+      .attr("stroke", "black");
 
-      svg
-        .append("text")
-        .attr("class", "position")
-        .attr("text-anchor", "end")
-        .attr("x", width)
-        .attr("y", height - 20)
-        .text("Position");
+    var flame2 = svg.append("rect");
 
-      svg
-        .append("text")
-        .attr("class", "marketValue")
-        .attr("text-anchor", "end")
-        .attr("y", 50+width/2+offset)
-        .attr("x", -50)
-        .attr("transform", "rotate(-90)")
-        .text("Market Value ($)");
+    flame2
+      .attr("x", offset + width / 2)
+      .attr("y", offset)
+      .attr("height", height)
+      .attr("width", width / 2)
+      .attr("fill", "white")
+      .attr("stroke-width", 1)
+      .attr("stroke", "black");
 
-      var incomeScale = d3
-        .scaleLinear()
-        //.domain([100, 100000])
-        .range([0, width/2-100]);
+    svg
+      .append("text")
+      .attr("class", "position")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height - 20)
+      .text("Position");
 
-      var lifeScale = d3.scaleLinear().domain([10, 90]).range([height-50, 0]);
-      var populationScale = d3.scaleSqrt().domain([0, 1e9]).range([1, 50]);
-      var incomeAxis = d3.axisBottom(incomeScale).ticks(5, d3.format(",d"));
-      var lifeAxis = d3.axisLeft(lifeScale);
+    svg
+      .append("text")
+      .attr("class", "marketValue")
+      .attr("text-anchor", "end")
+      .attr("y", 50 + width / 2 + offset)
+      .attr("x", -50)
+      .attr("transform", "rotate(-90)")
+      .text("Market Value ($)");
 
-      svg
-        .append("g")
-        .attr("class", "incomeAxis")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr("transform", "translate("+ (width/2+offset+100-10) + "," + (height) + ")")  //incomescaleのrangeに依存
-        .call(incomeAxis);
-      svg
-        .append("g")
-        .attr("class", "lifeAxis")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr("transform", "translate("+ (width/2+offset+100-10) + ",50)")
-        .call(lifeAxis);
-    </script>
-  </body>
+    var incomeScale = d3
+      .scaleLinear()
+      //.domain([100, 100000])
+      .range([0, width / 2 - 100]);
+
+    var lifeScale = d3.scaleLinear().domain([10, 90]).range([height - 50, 0]);
+    var populationScale = d3.scaleSqrt().domain([0, 1e9]).range([1, 50]);
+    var incomeAxis = d3.axisBottom(incomeScale).ticks(5, d3.format(",d"));
+    var lifeAxis = d3.axisLeft(lifeScale);
+
+    svg
+      .append("g")
+      .attr("class", "incomeAxis")
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("transform", "translate(" + (width / 2 + offset + 100 - 10) + "," + (height) + ")")  //incomescaleのrangeに依存
+      .call(incomeAxis);
+    svg
+      .append("g")
+      .attr("class", "lifeAxis")
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("transform", "translate(" + (width / 2 + offset + 100 - 10) + ",50)")
+      .call(lifeAxis);
+  </script>
+</body>
+
 </html>
