@@ -15,18 +15,24 @@ content = res.text
 # print(content)
 
 
-pagehead = 'https://www.transfermarkt.jp'
+pagehead = "https://www.transfermarkt.jp"
 soup1 = bs(content, "lxml")
-table = soup1.find_all("table", class_ = 'items') 
+table = soup1.find_all("table", class_="items")
 
 table = str(table)
 soup2 = bs(table, "lxml")
-info_tables = soup2.find_all("tr", class_ = ['even', 'odd'])
+info_tables = soup2.find_all("tr", class_=["even", "odd"])
+print(info_tables[1])
 
-for i in range(1,len(info_tables)):
+for i in range(1, len(info_tables)):
     info_tables[i] = str(info_tables[i])
     soup3 = bs(info_tables[i], "lxml")
-    a = soup3.find_all("a")
-    
-    player_url = pagehead + a[1].get('href')
-    print(player_url)
+
+    position_tag = soup3.find_all("td")
+    print(position_tag[0].get("title"))
+
+    name_tag = soup3.find_all("img")
+    print(name_tag[0].get("alt"))
+
+    url_tag = soup3.find_all("a")
+    print(pagehead + url_tag[1].get("href"))
