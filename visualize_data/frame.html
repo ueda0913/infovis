@@ -23,22 +23,35 @@
   </head>
   <body>
     <script type="text/javascript">
-      var width = 1300;
-      var height = 600;
+      var width = [630, 630, 400]; //window_size
+      var height = [690, 250, 400]
+      var height1 = 400;
+      var height2 = 250;
       var offset = 40; //固定
       var svg = d3
         .select("body")
         .append("svg")
-        .attr("width", width + 2 * offset)
-        .attr("height", height + 2 * offset);
+        .attr("width", width[0] * 2 + 3 * offset)
+        .attr("height", height[0] + 2 * offset);
+
+      // var flame1 = svg.append("rect");
+
+      // flame1
+      //   .attr("x", offset)
+      //   .attr("y", offset)
+      //   .attr("height", 50)
+      //   .attr("width", 50)
+      //   .attr("fill", "white")
+      //   .attr("stroke-width", 1)
+      //   .attr("stroke", "black");
 
       var flame1 = svg.append("rect");
 
       flame1
-        .attr("x", offset)
+        .attr("x", offset * 2 + width[1])
         .attr("y", offset)
-        .attr("height", height)
-        .attr("width", width / 2 - 40)
+        .attr("height", height[0])
+        .attr("width", width[0])
         .attr("fill", "white")
         .attr("stroke-width", 1)
         .attr("stroke", "black");
@@ -46,10 +59,21 @@
       var flame2 = svg.append("rect");
 
       flame2
-        .attr("x", offset + width/2)
+        .attr("x", offset)
+        .attr("y", offset * 2 + height[2])
+        .attr("height", height[1])
+        .attr("width", width[1])
+        .attr("fill", "white")
+        .attr("stroke-width", 1)
+        .attr("stroke", "black");
+
+      var flame3 = svg.append("rect");
+
+      flame3
+        .attr("x", offset  + width[1] - height[2])
         .attr("y", offset)
-        .attr("height", height)
-        .attr("width", width / 2)
+        .attr("height", height[2])
+        .attr("width", height[2])
         .attr("fill", "white")
         .attr("stroke-width", 1)
         .attr("stroke", "black");
