@@ -47,16 +47,25 @@
       .attr("stroke-width", 1)
       .attr("stroke", "black");
 
-    var flame2 = svg.append("rect");
+      //var flame2 = svg.append("rect");
+      var flame2;
+      var marketValue_graph = svg
+        .selectAll("rect2")
+        .append("g")
+        .attr("class", "market_value");
 
-    flame2
-      .attr("x", offset + width / 2)
-      .attr("y", offset)
-      .attr("height", height)
-      .attr("width", width / 2)
-      .attr("fill", "white")
-      .attr("stroke-width", 1)
-      .attr("stroke", "black");
+
+      flame2 = svg.selectAll(".market_value").append("rect");
+      console.log(flame1, flame2)
+
+      flame2
+        .attr("x", offset + width / 2)
+        .attr("y", offset)
+        .attr("height", height)
+        .attr("width", width / 2)
+        .attr("fill", "red")
+        .attr("stroke-width", 1)
+        .attr("stroke", "black");
 
     svg
       .append("text")
@@ -66,40 +75,50 @@
       .attr("y", height - 20)
       .text("Position");
 
-    svg
-      .append("text")
-      .attr("class", "marketValue")
-      .attr("text-anchor", "end")
-      .attr("y", 50 + width / 2 + offset)
-      .attr("x", -50)
-      .attr("transform", "rotate(-90)")
-      .text("Market Value ($)");
+      svg
+        .append("text")
+        .attr("class", "marketValue")
+        .attr("text-anchor", "end")
+        .attr("y", 50 + width / 2 + offset)
+        .attr("x", -50)
+        .attr("transform", "rotate(-90)")
+        .text("Market Value ($)");
 
-    var incomeScale = d3
-      .scaleLinear()
-      //.domain([100, 100000])
-      .range([0, width / 2 - 100]);
+      var positionScale = d3
+        .scaleLinear()
+        //.domain([100, 100000])
+        .range([0, width / 2 - 100]);
 
-    var lifeScale = d3.scaleLinear().domain([10, 90]).range([height - 50, 0]);
-    var populationScale = d3.scaleSqrt().domain([0, 1e9]).range([1, 50]);
-    var incomeAxis = d3.axisBottom(incomeScale).ticks(5, d3.format(",d"));
-    var lifeAxis = d3.axisLeft(lifeScale);
+      var valueScale = d3
+        .scaleLinear()
+        .domain([10, 90])
+        .range([height - 50, 0]);
+      var populationScale = d3.scaleSqrt().domain([0, 1e9]).range([1, 50]);
+      var positionAxis = d3.axisBottom(positionScale).ticks(5, d3.format(",d"));
+      var valueAxis = d3.axisLeft(valueScale);
 
-    svg
-      .append("g")
-      .attr("class", "incomeAxis")
-      .attr("fill", "none")
-      .attr("stroke", "black")
-      .attr("transform", "translate(" + (width / 2 + offset + 100 - 10) + "," + (height) + ")")  //incomescaleのrangeに依存
-      .call(incomeAxis);
-    svg
-      .append("g")
-      .attr("class", "lifeAxis")
-      .attr("fill", "none")
-      .attr("stroke", "black")
-      .attr("transform", "translate(" + (width / 2 + offset + 100 - 10) + ",50)")
-      .call(lifeAxis);
-  </script>
-</body>
+      svg
+        .append("g")
+        .attr("class", "positionAxis")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr(
+          "transform",
+          "translate(" + (width / 2 + offset + 100 - 10) + "," + height + ")"
+        ) //positionscaleのrangeに依存
+        .call(positionAxis);
+      svg
+        .append("g")
+        .attr("class", "valueAxis")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr(
+          "transform",
+          "translate(" + (width / 2 + offset + 100 - 10) + ",50)"
+        )
+        .call(valueAxis);
 
+      var tmpdata = [{}];
+    </script>
+  </body>
 </html>
