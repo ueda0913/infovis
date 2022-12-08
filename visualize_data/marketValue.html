@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta charset="utf-8" />
-    <title>D3 Test</title>
-    <script type="text/javascript" src="./d3.min.js"></script>
-    <style>
-      .tooltip {
-        position: absolute;
-        text-align: left;
-        width: auto;
-        height: auto;
-        padding: 5px;
-        font: 12px;
-        background: white;
-        -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-        -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-        visibility: hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
-      var width = 1300;
-      var height = 600;
-      var offset = 40; //固定
-      var svg = d3
-        .select("body")
-        .append("svg")
-        .attr("width", width + 2 * offset)
-        .attr("height", height + 2 * offset);
-      // .attr("width", width / 2 )
-      // .attr("height", height + offset * 2);
 
-      var flame1 = svg.append("rect");
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8" />
+  <title>D3 Test</title>
+  <script type="text/javascript" src="./d3.min.js"></script>
+  <style>
+    .tooltip {
+      position: absolute;
+      text-align: left;
+      width: auto;
+      height: auto;
+      padding: 5px;
+      font: 12px;
+      background: white;
+      -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      visibility: hidden;
+    }
+  </style>
+</head>
 
-      flame1
-        .attr("x", offset)
-        .attr("y", offset)
-        .attr("height", height)
-        .attr("width", width / 2 - 40)
-        .attr("fill", "white")
-        .attr("stroke-width", 1)
-        .attr("stroke", "black");
+<body>
+  <script type="text/javascript">
+    var width = 1300;
+    var height = 600;
+    var offset = 40; //固定
+    var svg = d3
+      .select("body")
+      .append("svg")
+      .attr("width", width + 2 * offset)
+      .attr("height", height + 2 * offset);
+    // .attr("width", width / 2 )
+    // .attr("height", height + offset * 2);
+
+    var flame1 = svg.append("rect");
+
+    flame1
+      .attr("x", offset)
+      .attr("y", offset)
+      .attr("height", height)
+      .attr("width", width / 2 - 40)
+      .attr("fill", "white")
+      .attr("stroke-width", 1)
+      .attr("stroke", "black");
 
       //var flame2 = svg.append("rect");
       var flame2;
@@ -65,13 +67,13 @@
         .attr("stroke-width", 1)
         .attr("stroke", "black");
 
-      svg
-        .append("text")
-        .attr("class", "position")
-        .attr("text-anchor", "end")
-        .attr("x", width)
-        .attr("y", height - 20)
-        .text("Position");
+    svg
+      .append("text")
+      .attr("class", "position")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height - 20)
+      .text("Position");
 
       svg
         .append("text")

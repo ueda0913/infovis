@@ -6,5 +6,3 @@ fi
 
 # url例: https://www.transfermarkt.jp/england/startseite/verein/3299
 data=`curl $1 | grep -e "ゴールキーパー" -e "ディフェンダー" -e "ミッドフィールダー" -e "フォワード" | grep title`
-
-echo $data
