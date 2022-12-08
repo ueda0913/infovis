@@ -5,16 +5,16 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta charset="utf-8" />
   <title>D3 Test</title>
-  <script type="text/javascript" src="./d3.js"></script>
+  <script type="text/javascript" src="./d3.min.js"></script>
   <style>
     .tooltip {
       position: absolute;
       text-align: left;
       width: auto;
       height: auto;
-      padding: 5px;
-      font: 12px;
-      background: white;
+      padding: 15px;
+      font: 20px;
+      background: greenyellow;
       -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
       -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
@@ -25,36 +25,50 @@
 
 <body>
   <script type="text/javascript">
-    var width = 1300/2;
-    var height = 600/2;
+    var width = 1300;
+    var height = 600;
     var offset = 40; //固定
     var svg = d3.select("body")
       .append("svg")
-      .attr("width", width + offset)
+      .attr("width", width)
       .attr("height", height + offset);
-
-    var RankScale = d3.scaleLinear().domain([1, 34]).range([0, height-20]);
-    var YearScale = d3.scaleLinear().domain([2008,2028]).range([0, width-20]);
-    var RankAxis = d3.axisLeft(RankScale).tickValues([1,8,16,32]);
+    
+    var worldcup_data = [];
+    var year = [2010,2014,2018];
+    //グラフの軸
+    var RankScale = d3.scaleLinear().domain([1, 22]).range([0, height-20]);
+    var YearScale = d3.scaleLinear().domain([2008,2028]).range([0, width-60]);
+    var RankAxis = d3.axisLeft(RankScale).tickValues([1,8,16]);
     var YearAxis = d3.axisBottom(YearScale).tickValues([2010,2014,2018,2022,2026]);
-
 
     svg.append("text")
       .attr("class", "RankLabel")
       .attr("text-anchor", "end")
-      .attr("x",  width+35 )
-      .attr("y", height+10 )
+      .attr("x",  50 )
+      .attr("y", offset + RankScale(20) )
+      .attr("font-size",10)
+      .text("不出場");
+
+    svg.append("text")
+      .attr("class", "RankLabel")
+      .attr("text-anchor", "end")
+      .attr("x",  width-5 )
+      .attr("y", height + 10 )
       .text("開催年");
 
-
-      
 
     svg.append("text")
       .attr("class", "YearLabel")
       .attr("text-anchor", "end")
-      .attr("x",100)
+      .attr("x",90)
       .attr("y", 60)
-      .text("順位");
+      .text("順");
+    svg.append("text")
+      .attr("class", "YearLabel")
+      .attr("text-anchor", "end")
+      .attr("x",90)
+      .attr("y", 80)
+      .text("位");
 
     svg.append("g")
     .attr("class", "YearAxis")
@@ -69,6 +83,48 @@
     .attr("stroke", "black")
     .attr("transform", "translate("+(20+offset)+","+offset+")")
     .call(RankAxis);
+    //
+
+
+    //csvの読込
+    d3.csv("worldcup_dataset2.csv").then(function(data) {
+
+      data.forEach(function(d)
+      {
+      worldcup_data.push({name: d.nation, result: [d.res2010,d.res2014,d.res2018] ,flag: d.national_flag});
+      });
+      console.log(worldcup_data);
+      Creategraph();
+  }); 
+
+  function Creategraph(){
+      var tooltip = d3.select("body").append("div").attr("class", "tooltip");
+      var line = d3.line()
+      .x(function(d,i) {return offset + 20 + YearScale(year[i]); })
+      .y(function(d,i) {return RankScale(d.result[i])  + offset; });
+
+      var graph = svg.append("path")
+      .data(worldcup_data)
+      .attr("d", line(worldcup_data))
+      .attr("stroke-width", 3)
+      .attr("stroke", "black")
+      .attr("fill", "none")
+      .on("mouseover", function(event,d,i) {
+     tooltip
+     .style("visibility", "visible")
+     .html(d.name);
+   })
+   .on("mousemove", function(event,d,i) {
+					tooltip
+						.style("top", (event.pageY - 20) + "px")
+						.style("left", (event.pageX + 10) + "px");
+				})
+   .on("mouseout", function(event,d,i) {
+     tooltip.style("visibility", "hidden");
+    })
+
+    }
+
 
   </script>
 </body>
