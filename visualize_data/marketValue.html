@@ -1,124 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>D3 Test</title>
+    <script type="text/javascript" src="./d3.min.js"></script>
+    <style>
+      .tooltip {
+        position: absolute;
+        text-align: left;
+        width: auto;
+        height: auto;
+        padding: 5px;
+        font: 12px;
+        background: white;
+        -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+        -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+        visibility: hidden;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta charset="utf-8" />
-  <title>D3 Test</title>
-  <script type="text/javascript" src="./d3.min.js"></script>
-  <style>
-    .tooltip {
-      position: absolute;
-      text-align: left;
-      width: auto;
-      height: auto;
-      padding: 5px;
-      font: 12px;
-      background: white;
-      -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      visibility: hidden;
-    }
-  </style>
-</head>
+  <body>
+    <script type="text/javascript">
+      var width = 690;
+      var height = 630;
+      var svg = d3
+        .select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+      
+      var tooltip = d3.select("body").append("div").attr("class", "tooltip");
 
-<body>
-  <script type="text/javascript">
-    var width = 1300;
-    var height = 600;
-    var offset = 40; //固定
-    var svg = d3
-      .select("body")
-      .append("svg")
-      .attr("width", width + 2 * offset)
-      .attr("height", height + 2 * offset);
-    // .attr("width", width / 2 )
-    // .attr("height", height + offset * 2);
+      var positionName = ["GK", "DF", "MF", "FW"];
+      var testData = [
+        {
+          year: "2022",
+          name: "Alisson",
+          position: "GK",
+          age: "30",
+          value: "50m€",
+        },
+        {
+          year: "2022",
+          name: "Ederson",
+          position: "GK",
+          age: "29",
+          value: "45m€",
+        },
+        {
+          year: "2022",
+          name: "Weverton",
+          position: "GK",
+          age: "34",
+          value: "3.5m€",
+        },
+        {
+          year: "2022",
+          name: "Marquinhos",
+          position: "DF",
+          age: "28",
+          value: "70m€",
+        },
+        {
+          year: "2022",
+          name: "Éder Militão",
+          position: "DF",
+          age: "24",
+          value: "60m€",
+        },
+        {
+          year: "2022",
+          name: "Fabinho",
+          position: "MF",
+          age: "29",
+          value: "55m€",
+        },
+        {
+          year: "2022",
+          name: "Fred",
+          position: "MF",
+          age: "29",
+          value: "20m€",
+        },
+        {
+          year: "2022",
+          name: "Vinicius Junior",
+          position: "FW",
+          age: "22",
+          value: "120m€",
+        },
+        {
+          year: "2022",
+          name: "Neymar",
+          position: "FW",
+          age: "30",
+          value: "75m€",
+        },
+        {
+          year: "2022",
+          name: "Richarlison",
+          position: "FW",
+          age: "25",
+          value: "50m€",
+        },
+      ];
 
-    var flame1 = svg.append("rect");
+      // var flame1 = svg.selectAll("flame").append("rect");
 
-    flame1
-      .attr("x", offset)
-      .attr("y", offset)
-      .attr("height", height)
-      .attr("width", width / 2 - 40)
-      .attr("fill", "white")
-      .attr("stroke-width", 1)
-      .attr("stroke", "black");
-
-      //var flame2 = svg.append("rect");
-      var flame2;
-      var marketValue_graph = svg
-        .selectAll("rect2")
-        .append("g")
-        .attr("class", "market_value");
-
-
-      flame2 = svg.selectAll(".market_value").append("rect");
-      console.log(flame1, flame2)
-
-      flame2
-        .attr("x", offset + width / 2)
-        .attr("y", offset)
-        .attr("height", height)
-        .attr("width", width / 2)
-        .attr("fill", "red")
-        .attr("stroke-width", 1)
-        .attr("stroke", "black");
-
-    svg
-      .append("text")
-      .attr("class", "position")
-      .attr("text-anchor", "end")
-      .attr("x", width)
-      .attr("y", height - 20)
-      .text("Position");
+      // flame1
+      //   .attr("x", 0)
+      //   .attr("y", 0)
+      //   .attr("height", height - 5)
+      //   .attr("width", width - 5)
+      //   .attr("fill", "white")
+      //   .attr("stroke-width", 4)
+      //   .attr("stroke", "black");
 
       svg
         .append("text")
-        .attr("class", "marketValue")
+        .attr("class", "position")
         .attr("text-anchor", "end")
-        .attr("y", 50 + width / 2 + offset)
-        .attr("x", -50)
+        .attr("x", width)
+        .attr("y", height - 40)
+        .text("Position");
+
+      svg
+        .append("text")
+        .attr("class", "Age")
+        .attr("text-anchor", "end")
+        .attr("y", 25)
         .attr("transform", "rotate(-90)")
-        .text("Market Value ($)");
+        .text("Age (years)");
 
       var positionScale = d3
-        .scaleLinear()
-        //.domain([100, 100000])
-        .range([0, width / 2 - 100]);
+        .scaleBand()
+        .domain(positionName)
+        .range([0, width - 80]);
+      console.log(positionScale("GK"), positionScale("DF"))
 
-      var valueScale = d3
+      var ageScale = d3
         .scaleLinear()
-        .domain([10, 90])
-        .range([height - 50, 0]);
-      var populationScale = d3.scaleSqrt().domain([0, 1e9]).range([1, 50]);
-      var positionAxis = d3.axisBottom(positionScale).ticks(5, d3.format(",d"));
-      var valueAxis = d3.axisLeft(valueScale);
+        .domain([10, 45])
+        .range([height - 30, 20]);
+
+      var valueScale = d3.scaleLinear().domain([1, 2e8]).range([10, 70]);
+
+      var positionAxis = d3.axisBottom(positionScale);
+      var ageAxis = d3.axisLeft(ageScale);
 
       svg
         .append("g")
         .attr("class", "positionAxis")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr(
-          "transform",
-          "translate(" + (width / 2 + offset + 100 - 10) + "," + height + ")"
-        ) //positionscaleのrangeに依存
+        .attr("fill", "black")
+        .attr("stroke", "none")
+        .attr("transform", "translate(50," + (height - 30) + ")")
         .call(positionAxis);
       svg
         .append("g")
         .attr("class", "valueAxis")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr(
-          "transform",
-          "translate(" + (width / 2 + offset + 100 - 10) + ",50)"
-        )
-        .call(valueAxis);
+        .attr("fill", "black")
+        .attr("stroke", "none")
+        .attr("transform", "translate(50, 0)")
+        .call(ageAxis);
 
-      var tmpdata = [{}];
+      svg
+        .selectAll("circle")
+        .data(testData)
+        .enter()
+        .append("circle")
+        .attr("class", "circle")
+        .attr("fill", "lightblue")
+        .attr("stroke", "black")
+        .on("mouseover", function(event, d){
+          tooltip
+            .style("visibility", "visible")
+            .html("選手名 : " + d.name + "<br>年齢 : " + d.age + "<br>市場価値 : " + d.value);
+        })
+        .on("mousemove", function (event, d) {
+          tooltip
+            .style("top", event.pageY - 20 + "px")
+            .style("left", event.pageX + 10 + "px");
+        })
+        .on("mouseout", function(event, d){
+          tooltip.style("visibility", "hidden");
+        })
+        .call(position)
+        .sort(order);
+
+      function position(p) {
+        p.attr("cx", function (d) {
+          console.log(positionScale(d.position));
+          return positionScale(d.position) + 120; //データのポジション名が違うなら、それに合わせて辞書型を作る
+        });
+        p.attr("cy", function (d) {
+          return ageScale(d.age); //同上
+        });
+        p.attr("r", function (d) {
+          //console.log(valueStrToNum(d.value));
+          return valueScale(valueStrToNum(d.value));
+        });
+      }
+
+      function order(a, b) {
+        return valueStrToNum(b.value) - valueStrToNum(a.value);
+      }
+
+      function valueStrToNum(valueStr) {
+        var index;
+        if (valueStr.indexOf("m") !== -1) {
+          index = valueStr.indexOf("m");
+          var strAns = valueStr.substr(0, index);
+          return Number(strAns) * 1e6;
+        } else if (valueStr.indexOf("k") !== -1) {
+          index = valueStr.indexOf("k");
+          var strAns = valueStr.substr(0, index);
+          return Number(strAns) * 1e3;
+        } else {
+          index = valueStr.indexOf("€");
+          var strAns = valueStr.substr(0, index);
+          return Number(strAns);
+        }
+      }
     </script>
   </body>
 </html>
