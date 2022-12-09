@@ -22,7 +22,7 @@ table = soup1.find_all("table", class_="items")
 table = str(table)
 soup2 = bs(table, "lxml")
 info_tables = soup2.find_all("tr", class_=["even", "odd"])
-print(info_tables[1])
+# print(info_tables[1])
 
 for i in range(1, len(info_tables)):
     info_tables[i] = str(info_tables[i])
@@ -36,3 +36,6 @@ for i in range(1, len(info_tables)):
 
     url_tag = soup3.find_all("a")
     print(pagehead + url_tag[1].get("href"))
+
+    image_tag = soup3.find_all("img")
+    print(image_tag[0].get("data-src"))
