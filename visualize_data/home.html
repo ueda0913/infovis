@@ -38,7 +38,7 @@
     //グラフの軸
     var RankScale = d3.scaleLinear().domain([1, 22]).range([0, height-20]);
     var YearScale = d3.scaleLinear().domain([2008,2028]).range([0, width-60]);
-    var RankAxis = d3.axisLeft(RankScale).tickValues([1,8,16]);
+    var RankAxis = d3.axisLeft(RankScale).tickValues([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
     var YearAxis = d3.axisBottom(YearScale).tickValues([2010,2014,2018,2022,2026]);
 
     svg.append("text")
@@ -93,35 +93,72 @@
       {
       worldcup_data.push({name: d.nation, result: [d.res2010,d.res2014,d.res2018] ,flag: d.national_flag});
       });
-      console.log(worldcup_data);
       Creategraph();
   }); 
 
   function Creategraph(){
       var tooltip = d3.select("body").append("div").attr("class", "tooltip");
+      var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+      /*
       var line = d3.line()
       .x(function(d,i) {return offset + 20 + YearScale(year[i]); })
       .y(function(d,i) {return RankScale(d.result[i])  + offset; });
-
+      */ 
+      
+      for (var j = 0; j < worldcup_data.length; j++){
       var graph = svg.append("path")
-      .data(worldcup_data)
-      .attr("d", line(worldcup_data))
+      .datum(worldcup_data[j].result)
+      .attr("d", d3.line()
+      .x(function(d,i) {return offset + 20 + YearScale(year[i]); })
+      .y(function(d,i) {return RankScale(d)  + offset; })
+      )
+      .datum([worldcup_data[j].name,worldcup_data[j].flag])
       .attr("stroke-width", 3)
-      .attr("stroke", "black")
+      .attr("stroke", colorScale(j))
       .attr("fill", "none")
       .on("mouseover", function(event,d,i) {
-     tooltip
-     .style("visibility", "visible")
-     .html(d.name);
-   })
-   .on("mousemove", function(event,d,i) {
-					tooltip
-						.style("top", (event.pageY - 20) + "px")
-						.style("left", (event.pageX + 10) + "px");
-				})
-   .on("mouseout", function(event,d,i) {
-     tooltip.style("visibility", "hidden");
-    })
+        tooltip
+        .style("visibility", "visible")
+        .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
+      })
+      .on("mousemove", function(event,d,i) {
+              tooltip
+                .style("top", (event.pageY - 20) + "px")
+                .style("left", (event.pageX + 10) + "px");
+            })
+      .on("mouseout", function(event,d,i) {
+        tooltip.style("visibility", "hidden");
+        })
+
+
+    var dotto = svg.append("g")
+    .selectAll("circle")
+    .data(worldcup_data[j].result)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d,i) { return offset + 20 + YearScale(year[i]); })
+    .attr("cy", function(d,i) { return RankScale(d)  + offset; })
+    .attr("fill", colorScale(j))
+    .attr("r", 7)
+    .datum([worldcup_data[j].name,worldcup_data[j].flag])
+    .on("mouseover", function(event,d,i) {
+        tooltip
+        .style("visibility", "visible")
+        .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
+      })
+      .on("mousemove", function(event,d,i) {
+              tooltip
+                .style("top", (event.pageY - 20) + "px")
+                .style("left", (event.pageX + 10) + "px");
+            })
+      .on("mouseout", function(event,d,i) {
+        tooltip.style("visibility", "hidden");
+        })
+
+    }
+
+      
+  
 
     }
 
