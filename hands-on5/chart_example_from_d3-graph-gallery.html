@@ -6,7 +6,7 @@
   <title>D3 v5 force simulation node detail</title>
   <style type="text/css">
     .selected {
-      visibility: visible;
+      visibility: hidden;
       pointer-events: none;
     }
 
@@ -147,7 +147,7 @@
             border_circle = d3
               .select("svg")
               .append("circle")
-              .attr("class", ".selected")
+              .attr("class", "selected")
               .attr("cx", centerNode.x)
               .attr("cy", centerNode.y)
               .attr("stroke", "black")
@@ -162,7 +162,8 @@
               .attr("r", circle_r);
           }
           border_circle
-            .style("visibility", "visible");
+            .style("visibility", "visible")
+            // .style("pointer-events", "none")
 
           if (d.index !== 0) {
             toolbox
