@@ -7,7 +7,9 @@
   <style type="text/css">
     .selected {
       visibility: visible;
+      pointer-events: none;
     }
+
     .tooltip {
       position: absolute;
       text-align: left;
@@ -50,8 +52,9 @@
     var toolbox = d3.select("body").append("div").attr("class", "toolbox");
     var nodesData = [];
     var linksData = [];
+    var region_dist = [{sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}];
 
-    d3.csv("worldcup_dataset2.csv").then(function(data) {
+    d3.csv("worldcup_dataset2.csv").then(function (data) {
       nodesData.push({
         "index": 0,
         "group": 1,
@@ -63,17 +66,18 @@
         "r": 10
       })
       var index = 1;
-    data.forEach(function(d)
-      {
+      data.forEach(function (d) {
+        region_dist[parseInt(d.region_num)].sum += parseFloat(d.distance);
+        region_dist[parseInt(d.region_num)].num += 1;
         nodesData.push({
-        "index": index,
-        "group": parseInt(d.region_num),
-        "name": d.nation,
-        "distance": parseFloat(d.distance),
-        "national_flag": d.national_flag,
-        "x": width * Math.random(),
-        "y": height * Math.random(),
-        "r": 10
+          "index": index,
+          "group": parseInt(d.region_num),
+          "name": d.nation,
+          "distance": parseFloat(d.distance),
+          "national_flag": d.national_flag,
+          "x": width * Math.random(),
+          "y": height * Math.random(),
+          "r": 10
         });
         index += 1;
       });
@@ -81,169 +85,163 @@
 
       var i = 0;  // 中心ノード
       for (var j = i + 1; j < nodesData.length; j++) {
-      linksData.push({
-        "source": i,
-        "target": j,
-        "l": nodesData[j].distance/100 + 5 + nodesData[i].r + nodesData[j].r
-         });
+        linksData.push({
+          "source": i,
+          "target": j,
+          "l": nodesData[j].distance / 100 + 5 + nodesData[i].r + nodesData[j].r
+        });
       }
 
-    
-     
-      
-    
-   
-    
-  
-    // 2. svg要素を配置
-    var link = d3.select("svg")
-      .selectAll("line")
-      .data(linksData)
-      .enter()
-      .append("line")
-      .attr("stroke-width", 1)
-      .attr("stroke", "black");
+      // 2. svg要素を配置
+      var link = d3.select("svg")
+        .selectAll("line")
+        .data(linksData)
+        .enter()
+        .append("line")
+        .attr("stroke-width", 1)
+        .attr("stroke", "black");
 
       var color = d3.scaleOrdinal()
-      .domain([0, 1, 2, 3, 4])
-      .range(["green", "black", "red", "blue", "yellow"])
+        .domain([0, 1, 2, 3, 4])
+        .range(["green", "black", "red", "blue", "yellow"])
 
-    var tooltip = d3.select("body").append("div").attr("class", "tooltip");
-    var node = d3.select("svg")
-      .selectAll("circle")
-      .data(nodesData)
-      .enter()
-      .append("circle")
-      .attr("r", function (d) { return d.r })
-      .attr("fill", function(d){ return color(d.group)})
-      .attr("stroke", "black")
-      .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended))
-      .on("mouseover", function(event,d,i) {
-        tooltip
-        .style("visibility", "visible")
-        .html(d.name + "<br>" + `<img src=${d.national_flag}  width="70" height="40" >`)
-      })
-      .on("mousemove", function(event,d,i) {
-              tooltip
-                .style("top", (event.pageY - 20) + "px")
-                .style("left", (event.pageX + 10) + "px");
-            })
-      .on("mouseout", function(event,d,i) {
-        tooltip.style("visibility", "hidden");
+      var tooltip = d3.select("body").append("div").attr("class", "tooltip");
+      var node = d3.select("svg")
+        .selectAll("circle")
+        .data(nodesData)
+        .enter()
+        .append("circle")
+        .attr("r", function (d) { return d.r })
+        .attr("fill", function (d) { return color(d.group) })
+        .attr("stroke", "black")
+        .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended))
+        .on("mouseover", function (event, d, i) {
+          tooltip
+            .style("visibility", "visible")
+            .html(d.name + "<br>" + `<img src=${d.national_flag}  width="70" height="40" >`)
+        })
+        .on("mousemove", function (event, d, i) {
+          tooltip
+            .style("top", (event.pageY - 20) + "px")
+            .style("left", (event.pageX + 10) + "px");
+        })
+        .on("mouseout", function (event, d, i) {
+          tooltip.style("visibility", "hidden");
         });
 
-    var border_circle;  //境界表示用円
-    var flag = false;
+      var border_circle;  //境界表示用円
+      var flag = false;
 
-    d3.select("svg").on("click", function (event) {
-      toolbox
-        .style("visibility", "hidden");
-      const d = event.target.__data__;
-      //console.log(event.target.className.baseVal);
-      if (event.target.tagName == "circle" && event.target.className.baseVal != ".selected") {
-        var centerNode = nodesData.find((e) => e.index === 0);  //中心のNode
-        var circle_r = Math.sqrt(((d.x - centerNode.x) ** 2) + (d.y - centerNode.y) ** 2);
-        if (!flag) {
-          border_circle = d3
-            .select("svg")
-            .append("circle")
-            .attr("class", ".selected")
-            .attr("cx", centerNode.x)
-            .attr("cy", centerNode.y)
-            .attr("stroke", "black")
-            .attr("opacity", 0.1)
-            .attr("stroke-width", 1)
-            .attr("r", circle_r);
-          flag = true;
+      d3.select("svg").on("click", function (event) {
+        toolbox
+          .style("visibility", "hidden");
+        const d = event.target.__data__;
+        //console.log(event.target.className.baseVal);
+        if (event.target.tagName == "circle" && event.target.className.baseVal != ".selected") {
+          var centerNode = nodesData.find((e) => e.index === 0);  //中心のNode
+          var circle_r = Math.sqrt(((d.x - centerNode.x) ** 2) + (d.y - centerNode.y) ** 2);
+          if (!flag) {
+            border_circle = d3
+              .select("svg")
+              .append("circle")
+              .attr("class", ".selected")
+              .attr("cx", centerNode.x)
+              .attr("cy", centerNode.y)
+              .attr("stroke", "black")
+              .attr("opacity", 0.1)
+              .attr("stroke-width", 1)
+              .attr("r", circle_r);
+            flag = true;
+          } else {
+            border_circle
+              .attr("cx", centerNode.x)
+              .attr("cy", centerNode.y)
+              .attr("r", circle_r);
+          }
+          border_circle
+            .style("visibility", "visible");
+
+          if (d.index !== 0) {
+            toolbox
+              .style("visibility", "visible")
+              .html(
+                "国名 : " +
+                d.name +
+                "<br>開催国との距離 : " +
+                d.distance + "(km)"    //今は表示上の半径を出力しているがデータが決まったら、実際の距離との補正項をかける
+              );
+          }
         } else {
           border_circle
-            .attr("cx", centerNode.x)
-            .attr("cy", centerNode.y)
-            .attr("r", circle_r);
+            .style("visibility", "hidden");
         }
-        border_circle
-          .style("visibility", "visible");
+      })
 
-        if (d.index !== 0) {
-          toolbox
-            .style("visibility", "visible")
-            .html(
-              "国名 : " +
-              d.name +
-              "<br>開催国との距離 : " +
-              d.distance + "(km)"    //今は表示上の半径を出力しているがデータが決まったら、実際の距離との補正項をかける
-            );
-        }
-      } else {
-        border_circle
-          .style("visibility", "hidden");
+      var x = d3.scaleOrdinal()
+        .domain([0, 1, 2, 3, 4])
+        .range([1.0 * region_dist[0].sum / region_dist[0].num, 0.31 * region_dist[1].sum / region_dist[1].num, -0.81 * region_dist[2].sum / region_dist[2].num, -0.81 * region_dist[3].sum / region_dist[3].num, 0.31 * region_dist[4].sum / region_dist[4].num])
+
+        var y = d3.scaleOrdinal()
+        .domain([0, 1, 2, 3, 4])
+        .range([0.0 * region_dist[0].sum / region_dist[0].num, 0.95 * region_dist[1].sum / region_dist[1].num, 0.58 * region_dist[2].sum / region_dist[2].num, -0.58 * region_dist[3].sum / region_dist[3].num, -0.95 * region_dist[4].sum / region_dist[4].num])      
+
+      // 3. forceSimulation設定
+      var simulation = d3.forceSimulation()
+        .force("link",
+          d3.forceLink()
+            .distance(function (d) { return d.l; })
+            .strength(0.03)
+            .iterations(16))
+        .force("collide",
+          d3.forceCollide()
+            .radius(function (d) { return d.r; })
+            .strength(0.7)
+            .iterations(16))
+        .force("charge", d3.forceManyBody().strength(-200))
+        .force("x", d3.forceX().strength(0.1).x(function (d) { return 0.03 * x(d.group)  + width / 2}))
+        .force("y", d3.forceY().strength(0.1).y(function (d) { return 0.03 * y(d.group)  + height / 4}));
+
+      simulation
+        .nodes(nodesData)
+        .on("tick", ticked);
+
+      simulation.force("link")
+        .links(linksData)
+        .id(function (d) { return d.index; });
+
+      // 4. forceSimulation 描画更新用関数
+      function ticked() {
+        link
+          .attr("x1", function (d) { return d.source.x; })
+          .attr("y1", function (d) { return d.source.y; })
+          .attr("x2", function (d) { return d.target.x; })
+          .attr("y2", function (d) { return d.target.y; });
+        node
+          .attr("cx", function (d) { return d.x; })
+          .attr("cy", function (d) { return d.y; });
+      }
+
+      // 5. ドラッグ時のイベント関数
+      function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+
+      function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
       }
     })
-
-    var x = d3.scaleOrdinal()
-      .domain([0, 1, 2, 3, 4])
-      .range([100, 500, 1000, 1500, 2000])
-
-      var y = d3.scaleOrdinal()
-    .domain([0, 1, 2, 3, 4])
-    .range([-200, -100, 0, -100, -200])
-    // 3. forceSimulation設定
-    var simulation = d3.forceSimulation()
-      .force("link",
-        d3.forceLink()
-          .distance(function (d) { return d.l; })
-          .strength(0.03)
-          .iterations(16))
-      .force("collide",
-        d3.forceCollide()
-          .radius(function (d) { return d.r; })
-          .strength(0.7)
-          .iterations(16))
-      .force("charge", d3.forceManyBody().strength(-200))
-      .force("x", d3.forceX().strength(0.02).x( function(d){ return x(d.group) } ))
-      .force("y", d3.forceY().strength(0.1).y(function(d){ return y(d.group) + height / 2}));
-
-    simulation
-      .nodes(nodesData)
-      .on("tick", ticked);
-
-    simulation.force("link")
-      .links(linksData)
-      .id(function (d) { return d.index; });
-
-    // 4. forceSimulation 描画更新用関数
-    function ticked() {
-      link
-        .attr("x1", function (d) { return d.source.x; })
-        .attr("y1", function (d) { return d.source.y; })
-        .attr("x2", function (d) { return d.target.x; })
-        .attr("y2", function (d) { return d.target.y; });
-      node
-        .attr("cx", function (d) { return d.x; })
-        .attr("cy", function (d) { return d.y; });
-    }
-
-    // 5. ドラッグ時のイベント関数
-    function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    }
-
-    function dragged(event, d) {
-      d.fx = event.x;
-      d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    }
-  })
 
   </script>
 </body>
