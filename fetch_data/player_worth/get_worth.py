@@ -23,11 +23,11 @@ def main():
                 csvwriter = csv.writer(g)
                 csvwriter.writerow(['name', 'country', 'position', 'image', 'worth', 'age'])
                 for row in csvreader:
-                    time.sleep(5)
+                    time.sleep(2) #2秒毎にスクレイピング
                     worth_info = get_worth(row.pop(-1), year)
                     csvwriter.writerow(row+worth_info)
                     count += 1
-                    if count % 10 == 0:
+                    if count % 5 == 0:
                         print(count)
 
 def get_worth(url,year):
