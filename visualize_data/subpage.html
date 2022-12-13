@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>D3 Test</title>
+    <script type="text/javascript" src="./d3.min.js"></script>
+  </head>
+  <style>
+    .tooltip {
+      position: absolute;
+      text-align: left;
+      width: auto;
+      height: auto;
+      padding: 5px;
+      font: 12px;
+      background: white;
+      -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      visibility: hidden;
+    }
+    svg {
+      border: 2px solid #000000;
+      width: auto;
+      height: auto;
+    }
+  </style>
+
+  <body>
+    <div id="marketValue"></div>
+    <div id="Twitter"></div>
+    <div id="nationMap"></div>
+    <script type="text/javascript">
+      var width = [630, 630, 400]; //window_size
+      var height = [690, 250, 400]
+      var Twitter = d3
+        .select("#Twitter") //ここをid名に変える#を前につける
+        .append("div")
+        .append("svg")
+        .attr("viewBox", `40 500 ${width[1]} ${height[1]}`)
+        .attr("x", 40)
+        .attr("y", 500)
+        .attr("width", width[1])
+        .attr("height", height[1]);
+
+      var marketValue = d3
+        .select("#marketValue") //ここをid名に変える#を前につける
+        .append("div")
+        .append("svg")
+        .attr("viewBox", `720 40 ${width[0]} ${height[0]}`)
+        .attr("width", width[0])
+        .attr("height", height[0]);
+
+      console.log(marketValue)
+      var tooltip = d3.select("body").append("div").attr("class", "tooltip");
+    </script>
+  </body>
+</html>
