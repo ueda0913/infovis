@@ -7,6 +7,10 @@
   <title>D3 Test</title>
   <script type="text/javascript" src="./d3.min.js"></script>
   <style>
+    .unselected {
+    opacity: 0.1;
+    }
+
     .tooltip {
       position: absolute;
       text-align: left;
@@ -25,6 +29,11 @@
 
 <body>
   <script type="text/javascript">
+    var selected_nation;
+    var selected_year;
+    var main_flag=1;
+
+  
     var width = 1300;
     var height = 600;
     var offset = 40; //固定
@@ -32,14 +41,19 @@
       .append("svg")
       .attr("width", width)
       .attr("height", height + offset);
-    
+
+
     var worldcup_data = [];
     var year = [2010,2014,2018];
     //グラフの軸
     var RankScale = d3.scaleLinear().domain([1, 22]).range([0, height-20]);
     var YearScale = d3.scaleLinear().domain([2008,2028]).range([0, width-60]);
+    var YearScale_inv = d3.scaleLinear().domain([20+offset, offset+width-40]).range([2008,2028]);
     var RankAxis = d3.axisLeft(RankScale).tickValues([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
     var YearAxis = d3.axisBottom(YearScale).tickValues([2010,2014,2018,2022,2026]);
+
+    
+  
 
     svg.append("text")
       .attr("class", "RankLabel")
@@ -71,24 +85,29 @@
       .text("位");
 
     svg.append("g")
-    .attr("class", "YearAxis")
     .attr("fill", "none")
     .attr("stroke", "black")
     .attr("transform", "translate("+(20+offset)+","+(offset+height-20)+")")
-    .call(YearAxis);
+    .call(YearAxis)
+    .attr("class", "YearAxis")
+    .select("path")
+    .attr("class", "YearAxis");
 
     svg.append("g")
     .attr("class", "RankAxis")
     .attr("fill", "none")
     .attr("stroke", "black")
     .attr("transform", "translate("+(20+offset)+","+offset+")")
-    .call(RankAxis);
+    .call(RankAxis)
+    .select("path")
+    .attr("class", "YearAxis")
+    ;
     //
 
 
     //csvの読込
     d3.csv("worldcup_dataset2.csv").then(function(data) {
-
+      
       data.forEach(function(d)
       {
       worldcup_data.push({name: d.nation, result: [d.res2010,d.res2014,d.res2018] ,flag: d.national_flag});
@@ -98,15 +117,17 @@
 
   function Creategraph(){
       var tooltip = d3.select("body").append("div").attr("class", "tooltip");
-      var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+      var colorScale = d3.scaleSequential(d3.interpolateRainbow).domain([0, worldcup_data.length]);
       /*
       var line = d3.line()
       .x(function(d,i) {return offset + 20 + YearScale(year[i]); })
       .y(function(d,i) {return RankScale(d.result[i])  + offset; });
       */ 
-      
+       
+
       for (var j = 0; j < worldcup_data.length; j++){
-      var graph = svg.append("path")
+      var graph= svg.append("path")
+      .attr("class",`${worldcup_data[j].name}`)
       .datum(worldcup_data[j].result)
       .attr("d", d3.line()
       .x(function(d,i) {return offset + 20 + YearScale(year[i]); })
@@ -117,6 +138,11 @@
       .attr("stroke", colorScale(j))
       .attr("fill", "none")
       .on("mouseover", function(event,d,i) {
+        d3.selectAll("path").classed("unselected",true);
+        d3.selectAll("circle").classed("unselected",true);
+        d3.selectAll(`.${d[0]}`).classed("unselected",false);
+        d3.selectAll(".YearAxis").classed("unselected",false);
+        d3.selectAll(".RankAxis").classed("unselected",false);
         tooltip
         .style("visibility", "visible")
         .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
@@ -124,10 +150,12 @@
       .on("mousemove", function(event,d,i) {
               tooltip
                 .style("top", (event.pageY - 20) + "px")
-                .style("left", (event.pageX + 10) + "px");
+                .style("left", (event.pageX + 100) + "px");
             })
       .on("mouseout", function(event,d,i) {
         tooltip.style("visibility", "hidden");
+        d3.selectAll("path").classed("unselected",false);
+        d3.selectAll("circle").classed("unselected",false);
         })
 
 
@@ -140,27 +168,39 @@
     .attr("cy", function(d,i) { return RankScale(d)  + offset; })
     .attr("fill", colorScale(j))
     .attr("r", 7)
+    .attr("class",`${worldcup_data[j].name}`)
     .datum([worldcup_data[j].name,worldcup_data[j].flag])
     .on("mouseover", function(event,d,i) {
         tooltip
         .style("visibility", "visible")
         .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
+        d3.selectAll("path").classed("unselected",true);
+        d3.selectAll("circle").classed("unselected",true);
+        d3.selectAll(`.${d[0]}`).classed("unselected",false);
+        d3.selectAll(".YearAxis").classed("unselected",false);
+        d3.selectAll(".RankAxis").classed("unselected",false);
       })
-      .on("mousemove", function(event,d,i) {
-              tooltip
-                .style("top", (event.pageY - 20) + "px")
-                .style("left", (event.pageX + 10) + "px");
-            })
-      .on("mouseout", function(event,d,i) {
+    .on("mousemove", function(event,d,i) {
+        tooltip
+        .style("top", (event.pageY - 20) + "px")
+        .style("left", (event.pageX + 100) + "px");
+     })
+    .on("mouseout", function(event,d,i) {
         tooltip.style("visibility", "hidden");
-        })
+        d3.selectAll("path").classed("unselected",false);
+        d3.selectAll("circle").classed("unselected",false);
+      })
+    .on("click", function(event,d){
+        selected_nation = d[0];
+        selected_year = YearScale_inv(this.cx.animVal.value);
+        window.location.href = `http://127.0.0.1:8887/marketvalue.html?nation=${selected_nation}&year=${selected_year}`;
+    })
+
+    } 
 
     }
 
-      
   
-
-    }
 
 
   </script>
