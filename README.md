@@ -33,3 +33,6 @@
 
 - jsにおけるsleep関数：
 [【JavaScript入門】処理を一時停止するsleep機能の実現方法まとめ](https://www.sejuku.net/blog/24629)
+
+- Mecabを用いた分かち書き：
+[Python で自然言語処理をしてみよう - MeCab 編](https://rinsaka.com/python/nltk/05-wordcloud.html)
