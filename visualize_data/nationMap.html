@@ -30,7 +30,7 @@
       width: auto;
       height: auto;
       padding: 5px;
-      font: 12px;
+      font: 7px;
       background: white;
       -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
       -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
@@ -49,8 +49,8 @@
 
     //svg
     // 1. 描画用のデータ準備
-    var width = 800;
-    var height = 600;
+    var width = 400;
+    var height = 400;
     
     var nationMap = d3.select("body")
       .append("svg")
@@ -69,6 +69,7 @@
     var region_dist = [{sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}];
 
     d3.csv(`distance${year}.csv`).then(function (data) {
+      console.log(data);
       data.forEach(function (d) {
         region_dist[parseInt(d.region_num)].sum += parseFloat(d.distance);
         region_dist[parseInt(d.region_num)].num += 1;
@@ -84,6 +85,7 @@
           "r": d.surporter
         });
       });
+      console.log(nodesData);
 
 
       var i = 0;  // 中心ノード
@@ -122,9 +124,17 @@
           //.on("drag", dragged)
           //.on("end", dragended))
         .on("mouseover", function (event, d, i) {
+          console.log(d);
           tooltip
             .style("visibility", "visible")
-            .html(d.name + "<br>" + `<img src=${d.national_flag}  width="70" height="40" >`)
+            .html(function(){
+              if(d.name == "スイス"){
+                return d.name + "<br>" + `<img src=${d.national_flag}  width="40" height="40" >`;
+              }
+              else{
+                return d.name + "<br>" + `<img src=${d.national_flag}  width="65" height="40" >`
+              }
+            })
         })
         .on("mousemove", function (event, d, i) {
           tooltip
@@ -140,10 +150,12 @@
       var x = d3.scaleOrdinal()
         .domain([0, 1, 2, 3, 4, 5])
         .range([0 ,1.0 * region_dist[1].sum / region_dist[1].num, 0.31 * region_dist[2].sum / region_dist[2].num, -0.81 * region_dist[3].sum / region_dist[3].num, -0.81 * region_dist[4].sum / region_dist[4].num, 0.31 * region_dist[5].sum / region_dist[5].num])
-
-        var y = d3.scaleOrdinal()
+ 
+      var y = d3.scaleOrdinal()
         .domain([0, 1, 2, 3, 4, 5])
         .range([0 ,0.0 * region_dist[1].sum / region_dist[1].num, 0.95 * region_dist[2].sum / region_dist[2].num, 0.58 * region_dist[3].sum / region_dist[3].num, -0.58 * region_dist[4].sum / region_dist[4].num, -0.95 * region_dist[5].sum / region_dist[5].num])      
+
+      var guide
 
      // 3. forceSimulation設定
       var simulation = d3.forceSimulation()
@@ -298,7 +310,33 @@
         }
       })
 
+    var legand = nationMap.append("rect")
+    .attr("x", 310)
+    .attr("height", 130)
+    .attr("width", 90)
+    .attr("fill", "none")
+    .attr("stroke-width", 1)
+    .attr("stroke", "black")
+  
+    var region = d3.scaleOrdinal()
+        .domain([0, 1, 2, 3, 4, 5])
+        .range(["開催国", "ヨーロッパ", "アジア", "南米", "アフリカ", "北中米カリブ海"])
 
+    for (var i = 0; i< 6; i++){
+    nationMap.append("circle")
+    .attr("fill", color(i))
+    .attr("cx", 320)
+    .attr("cy", 15 + i * 20 )
+    .attr("r",4)
+    .attr("stroke-width", 1)
+    .attr("stroke", "black")
+
+    nationMap.append("text")
+    .attr("x", 340 )
+    .attr("y", 15 + i * 20)
+    .attr("font-size",8)
+    .text(region(i));
+    }
       /*
       // 5. ドラッグ時のイベント関数
       function dragstarted(event, d) {

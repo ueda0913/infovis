@@ -32,21 +32,63 @@
       display: flex;
       flex-flow: row wrap;
       justify-content: space-around;
-      align-content: space-between;
+      align-content: space-around;
     }
     #flex-container2{
       display: flex;
       flex-flow: column wrap;
       justify-content: space-around;
-      align-content: space-between;
+      align-content: space-around;
       align-items: flex-end;
+    }
+    #flex-container3{
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: flex-start;
+      align-content: space-around;
+      align-items: center;
+    }
+    a{
+      width: 240px;
+	    height: 50px;
+      text-align: center; 
+      line-height: 50px; 
+      display: block;
+    }
+    #title{
+      border: none;
+      font-size: larger;
+      font-weight: bolder;
     }
   </style>
 
   <body>
+    <div id="title"></div>
     <div id="flex-container1">
       <div id="flex-container2">
-        <div id="nationMap"></div>
+        <div id="flex-container1">
+          <div id="flex-container3">
+            <a href="http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/home.html">メインページへ戻る</a>
+            <input type="search" name="searchNation" placeholder="国名">
+            <label>
+              <input type="radio" name="searchYear" value="2010">2010
+            </label>
+            <label>
+              <input type="radio" name="searchYear" value="2014">2014
+            </label>
+            <label>
+              <input type="radio" name="searchYear" value="2018">2018
+            </label>
+            <label>
+              <input type="radio" name="searchYear" value="2022">2022
+            </label>
+            <label>
+              <input type="radio" name="searchYear" value="2022">2026
+            </label>
+            <input type="submit" name="submit" value="移動">
+          </div>
+          <div id="nationMap"></div>
+        </div>
         <div id="Twitter"></div>
       </div>
       <div id="marketValue"></div>
@@ -60,8 +102,13 @@
         var queryArr = queryStr.split('=');
         queries.push(queryArr[1]);
       });
-      var nation = Number(queries[0]);
+      var nation = decodeURIComponent(queries[0]);
       var year = Number(queries[1]);
+
+      var title = d3
+        .select("#title")
+        .append("div")
+        .text(`${year} ${nation}代表の詳細`)
 
       var nationMap = d3
         .select("#nationMap") //ここをid名に変える#を前につける
@@ -83,6 +130,22 @@
         .append("svg")
         .attr("width", width[0])
         .attr("height", height[0]);
+      
+      let searchNation = document.querySelector(`input[name='searchNation']`);
+      let searchYear = document.getElementsByName('searchYear');
+      let submit = document.querySelector(`input[name='submit']`);
+
+      submit.addEventListener('click', function (event) {
+        nation = searchNation.value;
+        let len = searchYear.length;
+        for (let i = 0; i < len; i++){
+            if (searchYear.item(i).checked){
+                year = Number(searchYear.item(i).value);
+            }
+        }
+        window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${nation}&year=${year}`;
+      });
+
     </script>
     <script type="text/javascript" src="./marketValue.js"></script>
     <script type="text/javascript" src="./twitter.js"></script>
