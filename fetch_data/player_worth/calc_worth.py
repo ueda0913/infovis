@@ -30,7 +30,8 @@ def main():
                     if count % 10 == 0:
                         print(count)
 
-def get_worth(url,year):
+def calc_worth(url,year):
+    beforefind = 0
     res = requests.get(url, headers=header)
     content = res.text
     info_included =  [line.rstrip() for line in content.split('\n') if 'series' in line][-2]
@@ -39,15 +40,26 @@ def get_worth(url,year):
     for line in info:
         m = p.match(line)
         if m.group(3) < WCyear:
-            beforeyear = int(m.group(3))
+            beforefind = 1
             beforeworth = int(m.group(1))
+            beforeage = int(m.group(2))
+            beforeyear = int(m.group(3))
         if m.group(3) > WCyear:
             afteryear = int(m.group(3))
             afterworth = int(m.group(1))
             WCyear = int(WCyear)
-            worth = str(((afteryear - WCyear) * beforeworth + (WCyear - afterworth) * afterworth) / (afteryear - beforeyear))
-            age = str(int(m.group(2)) - afteryear + WCyear)
+            if beforefind:
+                worth = round(((afteryear - WCyear) * beforeworth + (WCyear - beforeyear) * afterworth) / (afteryear - beforeyear))
+                age = int(m.group(2)) - afteryear + WCyear
+            else:
+                worth = afterworth
+                age = int(m.group(2)) - afteryear + WCyear
             return [worth, age]
+    WCyear = int(WCyear)
+    worth = beforeworth
+    age = beforeage + WCyear - beforeyear
+    return [worth, age]
+        
 
 
 if __name__ == "__main__":

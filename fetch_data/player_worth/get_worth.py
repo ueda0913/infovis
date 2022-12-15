@@ -17,8 +17,7 @@ p = re.compile(r'\'y\':(\d+).*age\':\'(\d+).*datum_mw\':\'(\d+)')
 
 def main():
     count = 0
-    # for year in['2021', '2017', '2013', '2009']:
-    for year in ['2013', '2009']:
+    for year in['2021', '2017', '2013', '2009']:
         with open(player_csv_path + year + '.csv', encoding='utf8', newline='') as f:
             csvreader = csv.reader(f)
             csv_header = next(f)
