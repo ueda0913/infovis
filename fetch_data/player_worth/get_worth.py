@@ -31,10 +31,9 @@ def main():
                         print(count)
 
 def get_worth(url,year):
-    worth_info = []
     res = requests.get(url, headers=header)
     content = res.text
-    info_included =  [line.rstrip() for line in content.split('\n') if 'series' in line][0]
+    info_included =  [line.rstrip() for line in content.split('\n') if 'series' in line][-2]
     # print(info_included)
     info = [line for line in info_included.split('[')[5].split(']')[0].split('{') if 'verein' in line]
     # print(info)
