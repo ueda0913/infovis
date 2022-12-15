@@ -6,7 +6,7 @@ var tooltip = d3.select("body").append("div").attr("class", "tooltip");
 var positionName = ["ゴールキーパー", "ディフェンダー", "ミッドフィールダー", "フォワード"];
 var playerData = [];
 //軸を最大に合わせて調節すると比較にならない？
-d3.csv("../dataset/player_worth/playerworth2017.csv").then(function(data){
+d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
   data.forEach(function(d){
     if (d.country == nation){
       playerData.push({
