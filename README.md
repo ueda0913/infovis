@@ -22,3 +22,6 @@
 - hands-on5の対象としたforce simulation：[データビジュアライゼーション・ラボ](https://wizardace.com/d3-forcesimulation-link-detail/)
 
 - Twitterからデータを取得:[Optimized-Modified-GetOldTweets3-OMGOT](https://github.com/marquisvictor/Optimized-Modified-GetOldTweets3-OMGOT)
+
+- jsにおけるsleep関数：
+[【JavaScript入門】処理を一時停止するsleep機能の実現方法まとめ](https://www.sejuku.net/blog/24629)
