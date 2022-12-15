@@ -24,23 +24,22 @@ def main():
             with open(worth_csv_path + year + '.csv', 'w', encoding='utf-8', newline='') as g:
                 csvwriter = csv.writer(g)
                 csvwriter.writerow(['name', 'country', 'position', 'image', 'worth', 'age'])
-                for row in csvreader:
-                    time.sleep(2) #2秒毎にスクレイピング
-                    worth_info = get_worth(row[-1], year)
-                    if worth_info == 0:
-                        with open(error_csv_path + year + '.csv', 'w', encoding='utf-8' , newline='') as h:
+                with open(error_csv_path + year + '.csv', 'w', encoding='utf-8' , newline='') as h:
+                    for row in csvreader:
+                        time.sleep(2) #2秒毎にスクレイピング
+                        worth_info = get_worth(row[-1], year)
+                        if worth_info == 0:
                             csvwriter_error = csv.writer(h)
                             csvwriter_error.writerow(row)
-                    else:
-                        row.pop(-1)
-                        csvwriter.writerow(row+worth_info)
-                    print(row[0])
-                    count += 1
-                    if count % 10 == 0:
-                        print(count)
+                        else:
+                            row.pop(-1)
+                            csvwriter.writerow(row+worth_info)
+                        print(row[0])
+                        count += 1
+                        if count % 10 == 0:
+                            print(count)
 
 def get_worth(url,year):
-    before_flag = 0
     res = requests.get(url, headers=header)
     content = res.text
     info_included =  [line.rstrip() for line in content.split('\n') if 'series' in line][-2]
