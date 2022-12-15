@@ -7,6 +7,10 @@
 
 - frame.htmlのrectオブジェクトの部分と同じサイズに収まるようにしましょう。
 
+### 代表選手の市場価値について
+
+2014年のナイジェリア代表選手Odunlami Kunle...ページに当時の市場価格が書かれているが、形式が異なっていたため、手打ちとする。
+
 ### データ引用元
 
 - 首都の緯度経度：[世界の首都の位置データ Location Data of World Capitals](https://amano-tec.com/data/world.html)
