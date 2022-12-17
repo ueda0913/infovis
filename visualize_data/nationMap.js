@@ -1,53 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>nationMap</title>
-  <style type="text/css">
-    .selected {
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .tooltip {
-      position: absolute;
-      text-align: left;
-      width: auto;
-      height: auto;
-      padding: 15px;
-      font: 20px;
-      background: greenyellow;
-      -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      visibility: hidden;
-    }
-
-    .toolbox {
-      position: absolute;
-      text-align: left;
-      width: auto;
-      height: auto;
-      padding: 5px;
-      font: 7px;
-      background: white;
-      -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      visibility: hidden;
-      top: 20px;
-      left: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <script type="text/javascript" src="./d3.js"></script>
-  <script>
-
-    //svg
+//svg
     // 1. 描画用のデータ準備
     var width = 400;
     var height = 400;
@@ -58,17 +9,15 @@
       .attr("height", height);
     //最後消す
     var nation = "アルゼンチン";
-    var year = 2010;
+    var year = 2022;
     //
-
-
 
     var toolbox = d3.select("body").append("div").attr("class", "toolbox");
     var nodesData = [];
     var linksData = [];
     var region_dist = [{sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}];
 
-    d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
+    d3.csv(/*`../dataset/nations_data/distance${year}.csv`*/`distance${year}.csv`).then(function (data) {
       data.forEach(function (d) {
         region_dist[parseInt(d.region_num)].sum += parseFloat(d.distance);
         region_dist[parseInt(d.region_num)].num += 1;
@@ -78,13 +27,13 @@
           "name": d.nation,
           "distance": parseFloat(d.distance),
           "national_flag": d.national_flag,
-          "surporter":d.surporter,
+          "surporter":parseFloat(d.surporter),
           "x": width/4 + width/2 * Math.random(),
           "y": height/4 + width/2 * Math.random(),
-          "r": d.surporter
+          "r": parseFloat(d.surporter)
         });
       });
-
+      console.log(nodesData);
 
       var i = 0;  // 中心ノード
       for (var j = i + 1; j < nodesData.length; j++) {
@@ -94,6 +43,7 @@
           "l": nodesData[j].distance / 113 + 5 + nodesData[i].r + nodesData[j].r
         });
       }
+      console.log(linksData);
 
 
       // 2. svg要素を配置
@@ -143,8 +93,6 @@
           tooltip.style("visibility", "hidden");
         });
 
-
-
       var x = d3.scaleOrdinal()
         .domain([0, 1, 2, 3, 4, 5])
         .range([0 ,1.0 * region_dist[1].sum / region_dist[1].num, 0.31 * region_dist[2].sum / region_dist[2].num, -0.81 * region_dist[3].sum / region_dist[3].num, -0.81 * region_dist[4].sum / region_dist[4].num, 0.31 * region_dist[5].sum / region_dist[5].num])
@@ -160,14 +108,14 @@
         .force("link",
           d3.forceLink()
             .distance(function (d) { return d.l; })
-            .strength(0.03)
+            .strength(1.5)
             .iterations(16))
         .force("collide",
           d3.forceCollide()
             .radius(function (d) { return d.r; })
             .strength(0.7)
             .iterations(16))
-        .force("charge", d3.forceManyBody().strength(-75))
+        .force("charge", d3.forceManyBody().strength(-250))
         .force("x", d3.forceX().strength(0.1).x(function (d) { return   width / 2}))
         .force("y", d3.forceY().strength(0.1).y(function (d) { return  height / 2}));
 
@@ -335,6 +283,7 @@
     .attr("font-size",8)
     .text(region(i));
     }
+    })
       /*
       // 5. ドラッグ時のイベント関数
       function dragstarted(event, d) {
@@ -354,9 +303,3 @@
         d.fy = null;
       }
 */
-   
-})
-  </script>
-</body>
-
-</html>
