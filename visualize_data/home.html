@@ -8,7 +8,7 @@
   <script type="text/javascript" src="./d3.min.js"></script>
   <style>
     .unselected {
-    opacity: 0.1;
+      opacity: 0.1;
     }
 
     .tooltip {
@@ -25,7 +25,7 @@
       visibility: hidden;
     }
 
-    #title{
+    #title {
       border: none;
       font-size: x-large;
       font-weight: bold;
@@ -38,7 +38,7 @@
   <script type="text/javascript">
     var selected_nation;
     var selected_year;
-    var main_flag=1;
+    var main_flag = 1;
 
     var title = d3
       .select("#title")
@@ -55,163 +55,162 @@
 
 
     var worldcup_data = [];
-    var year = [2010,2014,2018,2022];
+    var year = [2010, 2014, 2018, 2022];
     //グラフの軸
-    var RankScale = d3.scaleLinear().domain([1, 22]).range([0, height-20]);
-    var YearScale = d3.scaleLinear().domain([2008,2024]).range([0, width-60]);
-    var YearScale_inv = d3.scaleLinear().domain([20+offset, offset+width-40]).range([2008,2024]);
-    var RankAxis = d3.axisLeft(RankScale).tickValues([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
-    var YearAxis = d3.axisBottom(YearScale).tickValues([2010,2014,2018,2022]);
+    var RankScale = d3.scaleLinear().domain([1, 22]).range([0, height - 20]);
+    var YearScale = d3.scaleLinear().domain([2008, 2024]).range([0, width - 60]);
+    var YearScale_inv = d3.scaleLinear().domain([20 + offset, offset + width - 40]).range([2008, 2024]);
+    var RankAxis = d3.axisLeft(RankScale).tickValues([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+    var YearAxis = d3.axisBottom(YearScale).tickValues([2010, 2014, 2018, 2022]);
 
-    
-  
+
+
 
     svg.append("text")
       .attr("class", "RankLabel")
       .attr("text-anchor", "end")
-      .attr("x",  50 )
-      .attr("y", offset + RankScale(20) )
-      .attr("font-size",10)
+      .attr("x", 50)
+      .attr("y", offset + RankScale(20))
+      .attr("font-size", 10)
       .text("不出場");
 
     svg.append("text")
       .attr("class", "RankLabel")
       .attr("text-anchor", "end")
-      .attr("x",  width-5 )
-      .attr("y", height + 10 )
+      .attr("x", width - 5)
+      .attr("y", height + 10)
       .text("開催年");
 
 
     svg.append("text")
       .attr("class", "YearLabel")
       .attr("text-anchor", "end")
-      .attr("x",90)
+      .attr("x", 90)
       .attr("y", 60)
       .text("順");
     svg.append("text")
       .attr("class", "YearLabel")
       .attr("text-anchor", "end")
-      .attr("x",90)
+      .attr("x", 90)
       .attr("y", 80)
       .text("位");
 
     svg.append("g")
-    .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("transform", "translate("+(20+offset)+","+(offset+height-20)+")")
-    .call(YearAxis)
-    .attr("class", "YearAxis")
-    .select("path")
-    .attr("class", "YearAxis");
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("transform", "translate(" + (20 + offset) + "," + (offset + height - 20) + ")")
+      .call(YearAxis)
+      .attr("class", "YearAxis")
+      .select("path")
+      .attr("class", "YearAxis");
 
     svg.append("g")
-    .attr("class", "RankAxis")
-    .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("transform", "translate("+(20+offset)+","+offset+")")
-    .call(RankAxis)
-    .select("path")
-    .attr("class", "YearAxis")
-    ;
+      .attr("class", "RankAxis")
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("transform", "translate(" + (20 + offset) + "," + offset + ")")
+      .call(RankAxis)
+      .select("path")
+      .attr("class", "YearAxis")
+      ;
     //
 
 
     //csvの読込
-    d3.csv("../dataset/nations_data/worldcup_dataset2.csv").then(function(data) {
-      
-      data.forEach(function(d)
-      {
-      worldcup_data.push({name: d.nation, result: [d.res2010,d.res2014,d.res2018,d.res2022] ,flag: d.national_flag});
+    d3.csv("../dataset/nations_data/worldcup_dataset2.csv").then(function (data) {
+
+      data.forEach(function (d) {
+        worldcup_data.push({ name: d.nation, result: [d.res2010, d.res2014, d.res2018, d.res2022], flag: d.national_flag });
       });
       Creategraph();
-  }); 
+    });
 
-  function Creategraph(){
+    function Creategraph() {
       var tooltip = d3.select("body").append("div").attr("class", "tooltip");
       var colorScale = d3.scaleSequential(d3.interpolateRainbow).domain([0, worldcup_data.length]);
       /*
       var line = d3.line()
       .x(function(d,i) {return offset + 20 + YearScale(year[i]); })
       .y(function(d,i) {return RankScale(d.result[i])  + offset; });
-      */ 
-       
-
-      for (var j = 0; j < worldcup_data.length; j++){
-      var graph= svg.append("path")
-      .attr("class",`${worldcup_data[j].name}`)
-      .datum(worldcup_data[j].result)
-      .attr("d", d3.line()
-      .x(function(d,i) {return offset + 20 + YearScale(year[i]); })
-      .y(function(d,i) {return RankScale(d)  + offset; })
-      )
-      .datum([worldcup_data[j].name,worldcup_data[j].flag])
-      .attr("stroke-width", 3)
-      .attr("stroke", colorScale(j))
-      .attr("fill", "none")
-      .on("mouseover", function(event,d,i) {
-        d3.selectAll("path").classed("unselected",true);
-        d3.selectAll("circle").classed("unselected",true);
-        d3.selectAll(`.${d[0]}`).classed("unselected",false);
-        d3.selectAll(".YearAxis").classed("unselected",false);
-        d3.selectAll(".RankAxis").classed("unselected",false);
-        tooltip
-        .style("visibility", "visible")
-        .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
-      })
-      .on("mousemove", function(event,d,i) {
-              tooltip
-                .style("top", (event.pageY - 20) + "px")
-                .style("left", (event.pageX + 100) + "px");
-            })
-      .on("mouseout", function(event,d,i) {
-        tooltip.style("visibility", "hidden");
-        d3.selectAll("path").classed("unselected",false);
-        d3.selectAll("circle").classed("unselected",false);
-        })
+      */
 
 
-    var dotto = svg.append("g")
-    .selectAll("circle")
-    .data(worldcup_data[j].result)
-    .enter()
-    .append("circle")
-    .attr("cx", function(d,i) { return offset + 20 + YearScale(year[i]); })
-    .attr("cy", function(d,i) { return RankScale(d)  + offset; })
-    .attr("fill", colorScale(j))
-    .attr("r", 7)
-    .attr("class",`${worldcup_data[j].name}`)
-    .datum([worldcup_data[j].name,worldcup_data[j].flag])
-    .on("mouseover", function(event,d,i) {
-        tooltip
-        .style("visibility", "visible")
-        .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
-        d3.selectAll("path").classed("unselected",true);
-        d3.selectAll("circle").classed("unselected",true);
-        d3.selectAll(`.${d[0]}`).classed("unselected",false);
-        d3.selectAll(".YearAxis").classed("unselected",false);
-        d3.selectAll(".RankAxis").classed("unselected",false);
-      })
-    .on("mousemove", function(event,d,i) {
-        tooltip
-        .style("top", (event.pageY - 20) + "px")
-        .style("left", (event.pageX + 100) + "px");
-     })
-    .on("mouseout", function(event,d,i) {
-        tooltip.style("visibility", "hidden");
-        d3.selectAll("path").classed("unselected",false);
-        d3.selectAll("circle").classed("unselected",false);
-      })
-    .on("click", function(event,d){
-        selected_nation = d[0];
-        selected_year = YearScale_inv(this.cx.animVal.value);
-        window.location.href = `./subpage.html?nation=${selected_nation}&year=${selected_year}`;
-        // window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${selected_nation}&year=${selected_year}`;
-    })
-    } 
+      for (var j = 0; j < worldcup_data.length; j++) {
+        var graph = svg.append("path")
+          .attr("class", `${worldcup_data[j].name}`)
+          .datum(worldcup_data[j].result)
+          .attr("d", d3.line()
+            .x(function (d, i) { return offset + 20 + YearScale(year[i]); })
+            .y(function (d, i) { return RankScale(d) + offset; })
+          )
+          .datum([worldcup_data[j].name, worldcup_data[j].flag])
+          .attr("stroke-width", 3)
+          .attr("stroke", colorScale(j))
+          .attr("fill", "none")
+          .on("mouseover", function (event, d, i) {
+            d3.selectAll("path").classed("unselected", true);
+            d3.selectAll("circle").classed("unselected", true);
+            d3.selectAll(`.${d[0]}`).classed("unselected", false);
+            d3.selectAll(".YearAxis").classed("unselected", false);
+            d3.selectAll(".RankAxis").classed("unselected", false);
+            tooltip
+              .style("visibility", "visible")
+              .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
+          })
+          .on("mousemove", function (event, d, i) {
+            tooltip
+              .style("top", (event.pageY - 20) + "px")
+              .style("left", (event.pageX + 100) + "px");
+          })
+          .on("mouseout", function (event, d, i) {
+            tooltip.style("visibility", "hidden");
+            d3.selectAll("path").classed("unselected", false);
+            d3.selectAll("circle").classed("unselected", false);
+          })
+
+
+        var dotto = svg.append("g")
+          .selectAll("circle")
+          .data(worldcup_data[j].result)
+          .enter()
+          .append("circle")
+          .attr("cx", function (d, i) { return offset + 20 + YearScale(year[i]); })
+          .attr("cy", function (d, i) { return RankScale(d) + offset; })
+          .attr("fill", colorScale(j))
+          .attr("r", 7)
+          .attr("class", `${worldcup_data[j].name}`)
+          .datum([worldcup_data[j].name, worldcup_data[j].flag])
+          .on("mouseover", function (event, d, i) {
+            tooltip
+              .style("visibility", "visible")
+              .html(d[0] + "<br>" + `<img src=${d[1]}  width="70" height="40" >`)
+            d3.selectAll("path").classed("unselected", true);
+            d3.selectAll("circle").classed("unselected", true);
+            d3.selectAll(`.${d[0]}`).classed("unselected", false);
+            d3.selectAll(".YearAxis").classed("unselected", false);
+            d3.selectAll(".RankAxis").classed("unselected", false);
+          })
+          .on("mousemove", function (event, d, i) {
+            tooltip
+              .style("top", (event.pageY - 20) + "px")
+              .style("left", (event.pageX + 100) + "px");
+          })
+          .on("mouseout", function (event, d, i) {
+            tooltip.style("visibility", "hidden");
+            d3.selectAll("path").classed("unselected", false);
+            d3.selectAll("circle").classed("unselected", false);
+          })
+          .on("click", function (event, d) {
+            selected_nation = d[0];
+            selected_year = YearScale_inv(this.cx.animVal.value);
+            window.location.href = `./subpage.html?nation=${selected_nation}&year=${selected_year}`;
+            // window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${selected_nation}&year=${selected_year}`;
+          })
+      }
 
     }
 
-  
+
 
 
   </script>
