@@ -66,6 +66,7 @@
         .enter()
         .append("circle")
         .attr("r", function (d) { return d.r })
+        .attr("opacity", function(d){if (d.name != nation) return 0.5})
         .attr("fill", function (d) { return color(d.group) })
         .attr("stroke", "black")
         //.call(d3.drag()
@@ -275,7 +276,7 @@
     .attr("cy", 15 + i * 20 )
     .attr("r",4)
     .attr("stroke-width", 1)
-    .attr("stroke", "black")
+    .attr("stroke", "black");
 
     nationMap.append("text")
     .attr("x", 340 )
