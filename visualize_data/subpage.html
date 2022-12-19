@@ -20,21 +20,6 @@
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
       visibility: hidden;
     }
-    .toolbox {
-      position: absolute;
-      text-align: left;
-      width: auto;
-      height: auto;
-      padding: 5px;
-      font: 7px;
-      background: white;
-      -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-      visibility: hidden;
-      top: 50px;
-      left: 300px;
-    }
     .tooltip2 {
       position: absolute;
       text-align: left;
@@ -92,6 +77,12 @@
       font-size: larger;
       font-weight: bolder;
     }
+    .comparison{
+      position: absolute;
+      top: 180px;
+      right: 80px;
+      z-index: 100;
+    }
   </style>
 
   <body>
@@ -131,6 +122,13 @@
       </div>
       <div class="marketValue"></div>
     </div>
+    <div class="comparison">
+      <div class="flex-container2">
+        <input type="search" name="searchComNation" placeholder="国名">
+        <input type="submit" name="submitCom" value="重ねる">
+        <input type="submit" name="submitCom_del" value="重ねない">
+      </div>
+    </div>
     <script type="text/javascript">
       var width = [630, 630, 400]; //window_size
       var height = [690, 250, 400];
@@ -142,6 +140,11 @@
       });
       var nation = decodeURIComponent(queries[0]);
       var year = Number(queries[1]);
+      var comparison_nation = "";
+      if (queries.length === 3){
+        comparison_nation =  decodeURIComponent(queries[2]);
+      }
+      // console.log(comparison_nation)
 
       var title = d3
         .select(".title")
@@ -185,6 +188,19 @@
         }
         window.location.href = `./subpage.html?nation=${nation}&year=${year}`;
         // window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${nation}&year=${year}`;
+      });
+
+      let searchComNation = document.querySelector(`input[name='searchComNation']`);
+      let submitCom = document.querySelector(`input[name='submitCom']`);
+      let submitCom_del = document.querySelector(`input[name='submitCom_del']`);
+      submitCom.addEventListener('click', function (event) {
+        if (searchComNation.value !== ""){
+          comparison_nation = searchComNation.value;
+        }
+        window.location.href = `./subpage.html?nation=${nation}&year=${year}&comparison_nation=${comparison_nation}`;
+      });
+      submitCom_del.addEventListener('click', function (event) {
+        window.location.href = `./subpage.html?nation=${nation}&year=${year}`;
       });
 
     </script>

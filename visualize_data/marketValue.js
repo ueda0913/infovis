@@ -5,6 +5,7 @@ var tooltip = d3.select("body").append("div").attr("class", "tooltip");
 
 var positionName = ["ゴールキーパー", "ディフェンダー", "ミッドフィールダー", "フォワード"];
 var playerData = [];
+var comparisonData = [];
 //軸を最大に合わせて調節すると比較にならない？
 d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
   data.forEach(function(d){
@@ -17,6 +18,15 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
         image: d.image,
       });
     }
+    else if (d.country == comparison_nation || d.country == comparison_nation.substr(0, 4)){
+        comparisonData.push({
+          name: d.name,
+          position: d.position,
+          age: d.age,
+          value: d.worth,
+          image: d.image,
+        });
+      }
   })
 
 
@@ -203,6 +213,54 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
         })
         .call(position);
 
+    if (comparisonData.length !== 0){
+        var valueCircleCom = marketValue
+            .selectAll("polygon")
+            .data(comparisonData)
+            .enter()
+            .append("polygon")
+            .attr("class", "polygon")
+            .attr("points", "10 2.7, 20 20, 0 20")
+            //.attr("fill", "lightblue")
+            .attr("fill", function(d, i){
+                if (d.position === positionName[0]){
+                    return color[0];
+                } else if (d.position === positionName[1]){
+                    return color[1];
+                } else if (d.position === positionName[2]){
+                    return color[2];
+                } else {
+                    return color[3];
+                }
+            })
+            .attr("stroke", "black")
+            // .attr("height", 20)
+            // .attr("width", 20)
+            .style("opacity", 0.3)
+            .on("mouseover", function (event, d) {
+                tooltip
+                .style("visibility", "visible")
+                .html(
+                    "選手名 : " +
+                    d.name +
+                    "<br>年齢 : " +
+                    d.age +
+                    "<br>市場価値 : " +
+                    d.value/1000000 + "million €" +
+                    `<br><img src=${d.image}  width="70">`
+                );
+            })
+            .on("mousemove", function (event, d) {
+                tooltip
+                .style("top", event.pageY - 20 + "px")
+                .style("left", event.pageX + 10 + "px");
+            })
+            .on("mouseout", function (event, d) {
+                tooltip.style("visibility", "hidden");
+            })
+            .call(position_comparison);
+        
+    }
     var legend = marketValue.selectAll(".legend")
         .data(positionName)
         .enter()
@@ -231,6 +289,16 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
             return d;
         });
 
+    marketValue.append("text")
+        .attr("x", 450)
+        .attr("y", 120)
+        .text(function(){
+            if (comparisonData.length !== 0){
+                return `参照国：${comparison_nation}`;
+            }else{
+                return "参照国：なし"
+            }
+        })
     function position(p) {
         p.attr("cx", function (d) {
             return valueScale(Number(d.value) / 1000000) + 50;
@@ -239,6 +307,20 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
             return ageScale(d.age); //同上
         });
     }
+
+    function position_comparison(p) {
+        // p.attr("x", function (d) {
+        //     return valueScale(Number(d.value) / 1000000) + 50;
+        // });
+        // p.attr("y", function (d) {
+        //     return ageScale(d.age); //同上
+        // });
+        p.attr("transform", function(d){
+
+            return "translate(" + (valueScale(Number(d.value) / 1000000) + 50) + "," + ageScale(d.age) + ")";
+        });
+    }
+
 
     function valueStrToNum(valueStr) {
         var index;
@@ -282,6 +364,7 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
             valueAxis = d3.axisBottom(valueScale).ticks(5, d3.format(",d"));
             marketValue.selectAll(".valueAxis").call(valueAxis);
             valueCircle.call(position);
+            valueCircleCom.call(position_comparison);
         }
     }
     function dragended() {}
