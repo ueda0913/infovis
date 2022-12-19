@@ -6,7 +6,61 @@ var tooltip = d3.select("body").append("div").attr("class", "tooltip");
 var positionName = ["ゴールキーパー", "ディフェンダー", "ミッドフィールダー", "フォワード"];
 var playerData = [];
 var comparisonData = [];
+var flag = false;
+if (comparison_year !== year){
+    flag = true;
+}
+
+marketValue
+    .append("text")
+    .attr("class", "value")
+    .attr("text-anchor", "end")
+    .attr("x", width[0])
+    .attr("y", height[0] - 40)
+    .text("Market Value (million €)");
+
+
+marketValue
+    .append("text")
+    .attr("class", "Age")
+    .attr("text-anchor", "end")
+    .attr("y", 25)
+    .attr("transform", "rotate(-90)")
+    .text("Age (years)");
+
+
+var ageScale = d3
+    .scaleLinear()
+    .domain([15, 45])
+    .range([height[0] - 30, 20]);
+
+var valueScale = d3
+    .scaleLinear()
+    .domain([0, valueScale_max])
+    .range([0, width[0] - 80]);
+
+var ageAxis = d3.axisLeft(ageScale);
+var valueAxis = d3.axisBottom(valueScale).ticks(5, d3.format(",d"));
+
+marketValue
+    .append("g")
+    .attr("class", "valueAxis")
+    .attr("fill", "black")
+    .attr("stroke", "none")
+    .attr("transform", "translate(50," + (height[0] - 30) + ")")
+    .call(valueAxis);
+
+marketValue
+    .append("g")
+    .attr("class", "ageAxis")
+    .attr("fill", "black")
+    .attr("stroke", "none")
+    .attr("transform", "translate(50, 0)")
+    .call(ageAxis);
+
 //軸を最大に合わせて調節すると比較にならない？
+var valueCircle;
+var valueCircleCom;
 d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
   data.forEach(function(d){
     if (d.country == nation || d.country == nation.substr(0, 4)){
@@ -16,161 +70,23 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
         age: d.age,
         value: d.worth,
         image: d.image,
+        Year: year,
       });
     }
-    else if (d.country == comparison_nation || d.country == comparison_nation.substr(0, 4)){
+    else if (!flag && (d.country == comparison_nation || d.country == comparison_nation.substr(0, 4))){
         comparisonData.push({
           name: d.name,
           position: d.position,
           age: d.age,
           value: d.worth,
           image: d.image,
+          Year: comparison_year,
         });
       }
-  })
+  });
+    console.log(comparisonData)
 
-
-
-    var testData = [
-    {
-        year: "2022",
-        name: "Alisson",
-        position: "ゴールキーパー",
-        age: "30",
-        value: "50m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/20180610_FIFA_Friendly_Match_Austria_vs._Brazil_850_1625.jpg/460px-20180610_FIFA_Friendly_Match_Austria_vs._Brazil_850_1625.jpg",
-    },
-    {
-        year: "2022",
-        name: "Ederson",
-        position: "ゴールキーパー",
-        age: "29",
-        value: "45m€",
-        image:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Ederson.png/400px-Ederson.png",
-    },
-    {
-        year: "2022",
-        name: "Weverton",
-        position: "ゴールキーパー",
-        age: "34",
-        value: "3.5m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/1/1e/Brasil_estreia_contra_a_África_do_Sul_no_Mané_Garrincha_—_копия_%285%29.jpg",
-    },
-    {
-        year: "2022",
-        name: "Marquinhos",
-        position: "ディフェンダー",
-        age: "28",
-        value: "70m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_nos_penaltis_1039278-20082016-_mg_4916_%28cropped%29.jpg/400px-Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_nos_penaltis_1039278-20082016-_mg_4916_%28cropped%29.jpg",
-    },
-    {
-        year: "2022",
-        name: "Éder Militão",
-        position: "ディフェンダー",
-        age: "24",
-        value: "60m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Eder_Militao_2021.jpg/400px-Eder_Militao_2021.jpg",
-    },
-    {
-        year: "2022",
-        name: "Fabinho",
-        position: "ミッドフィールダー",
-        age: "29",
-        value: "55m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fabinho_%2843934382122%29_%28cropped%29.jpg/400px-Fabinho_%2843934382122%29_%28cropped%29.jpg",
-    },
-    {
-        year: "2022",
-        name: "Fred",
-        position: "ミッドフィールダー",
-        age: "29",
-        value: "20m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Fred_Brazil.jpg/500px-Fred_Brazil.jpg",
-    },
-    {
-        year: "2022",
-        name: "Vinicius Junior",
-        position: "フォワード",
-        age: "22",
-        value: "120m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Vinicius_Jr_2021.jpg/400px-Vinicius_Jr_2021.jpg",
-    },
-    {
-        year: "2022",
-        name: "Neymar",
-        position: "フォワード",
-        age: "30",
-        value: "75m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Neymar_850_1705.jpg/460px-20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Neymar_850_1705.jpg",
-    },
-    {
-        year: "2022",
-        name: "Richarlison",
-        position: "フォワード",
-        age: "25",
-        value: "50m€",
-        image:
-        "https://upload.wikimedia.org/wikipedia/commons/5/5b/07_07_2019_Final_da_Copa_América_2019_%2848226557731%29_%28cropped%29.jpg",
-    },
-    ];
-
-    marketValue
-        .append("text")
-        .attr("class", "value")
-        .attr("text-anchor", "end")
-        .attr("x", width[0])
-        .attr("y", height[0] - 40)
-        .text("Market Value (million €)");
-
-
-    marketValue
-        .append("text")
-        .attr("class", "Age")
-        .attr("text-anchor", "end")
-        .attr("y", 25)
-        .attr("transform", "rotate(-90)")
-        .text("Age (years)");
-
-
-    var ageScale = d3
-        .scaleLinear()
-        .domain([15, 45])
-        .range([height[0] - 30, 20]);
-
-    var valueScale = d3
-        .scaleLinear()
-        .domain([0, valueScale_max])
-        .range([0, width[0] - 80]);
-
-    var ageAxis = d3.axisLeft(ageScale);
-    var valueAxis = d3.axisBottom(valueScale).ticks(5, d3.format(",d"));
-
-    marketValue
-        .append("g")
-        .attr("class", "valueAxis")
-        .attr("fill", "black")
-        .attr("stroke", "none")
-        .attr("transform", "translate(50," + (height[0] - 30) + ")")
-        .call(valueAxis);
-
-    marketValue
-        .append("g")
-        .attr("class", "ageAxis")
-        .attr("fill", "black")
-        .attr("stroke", "none")
-        .attr("transform", "translate(50, 0)")
-        .call(ageAxis);
-
-    var valueCircle = marketValue
+    valueCircle = marketValue
         .selectAll("circle")
         .data(playerData)
         .enter()
@@ -214,7 +130,7 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
         .call(position);
 
     if (comparisonData.length !== 0){
-        var valueCircleCom = marketValue
+        valueCircleCom = marketValue
             .selectAll("polygon")
             .data(comparisonData)
             .enter()
@@ -289,38 +205,18 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
             return d;
         });
 
-    marketValue.append("text")
-        .attr("x", 450)
-        .attr("y", 120)
-        .text(function(){
-            if (comparisonData.length !== 0){
-                return `参照国：${comparison_nation}`;
-            }else{
-                return "参照国：なし"
-            }
-        })
-    function position(p) {
-        p.attr("cx", function (d) {
-            return valueScale(Number(d.value) / 1000000) + 50;
-        });
-        p.attr("cy", function (d) {
-            return ageScale(d.age); //同上
-        });
+    if (!flag){
+        marketValue.append("text")
+            .attr("x", 450)
+            .attr("y", 120)
+            .text(function(){
+                if (comparisonData.length !== 0){
+                    return `参照国：${comparison_nation}(${comparison_year})`;
+                }else{
+                    return "参照国：なし"
+                }
+            })
     }
-
-    function position_comparison(p) {
-        // p.attr("x", function (d) {
-        //     return valueScale(Number(d.value) / 1000000) + 50;
-        // });
-        // p.attr("y", function (d) {
-        //     return ageScale(d.age); //同上
-        // });
-        p.attr("transform", function(d){
-
-            return "translate(" + (valueScale(Number(d.value) / 1000000) + 50) + "," + ageScale(d.age) + ")";
-        });
-    }
-
 
     function valueStrToNum(valueStr) {
         var index;
@@ -339,6 +235,84 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
         }
     }
 
+});
+
+if (flag){
+    d3.csv(`../dataset/player_worth/playerworth${comparison_year-1}.csv`).then(function(d2){
+        d2.forEach(function(d4){
+            if (d4.country == comparison_nation || d4.country == comparison_nation.substr(0, 4)){
+                comparisonData.push({
+                name: d4.name,
+                position: d4.position,
+                age: d4.age,
+                value: d4.worth,
+                image: d4.image,
+                Year: comparison_year,
+                });
+            }
+        });
+        console.log(comparisonData)
+        valueCircleCom = marketValue
+            .selectAll("polygon")
+            .data(comparisonData)
+            .enter()
+            .append("polygon")
+            .attr("class", "polygon")
+            .attr("points", "10 2.7, 20 20, 0 20")
+            //.attr("fill", "lightblue")
+            .attr("fill", function(d, i){
+                if (d.position === positionName[0]){
+                    return color[0];
+                } else if (d.position === positionName[1]){
+                    return color[1];
+                } else if (d.position === positionName[2]){
+                    return color[2];
+                } else {
+                    return color[3];
+                }
+            })
+            .attr("stroke", "black")
+            // .attr("height", 20)
+            // .attr("width", 20)
+            .style("opacity", 0.3)
+            .on("mouseover", function (event, d) {
+                tooltip
+                .style("visibility", "visible")
+                .html(
+                    "選手名 : " +
+                    d.name +
+                    "<br>年齢 : " +
+                    d.age +
+                    "<br>市場価値 : " +
+                    d.value/1000000 + "million €" +
+                    `<br><img src=${d.image}  width="70">`
+                );
+            })
+            .on("mousemove", function (event, d) {
+                tooltip
+                .style("top", event.pageY - 20 + "px")
+                .style("left", event.pageX + 10 + "px");
+            })
+            .on("mouseout", function (event, d) {
+                tooltip.style("visibility", "hidden");
+            })
+            .call(position_comparison);
+
+        console.log(comparisonData.length)
+        marketValue.append("text")
+            .attr("x", 450)
+            .attr("y", 120)
+            .text(function(){
+                if (comparisonData.length !== 0){
+                    return `参照国：${comparison_nation} (${comparison_year})`;
+                }else{
+                    return "参照国：なし"
+                }
+            });
+    
+        });
+    }
+    
     marketValue.call(
         d3
         .drag()
@@ -346,7 +320,7 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
         .on("drag", dragged)
         .on("end", dragended)
     );
-  
+    
     var drag_delta;
     function dragstarted() {
         drag_delta = 0;
@@ -363,10 +337,23 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
             .domain([0, valueScale_max]);
             valueAxis = d3.axisBottom(valueScale).ticks(5, d3.format(",d"));
             marketValue.selectAll(".valueAxis").call(valueAxis);
-            valueCircle.call(position);
+            valueCircle.call(position)
             valueCircleCom.call(position_comparison);
         }
     }
-    function dragended() {}
+    function dragended() {};
 
-})
+    function position_comparison(p) {
+        p.attr("transform", function(d){
+            return "translate(" + (valueScale(Number(d.value) / 1000000) + 50) + "," + ageScale(d.age) + ")";
+        });
+    }
+
+    function position(p) {
+        p.attr("cx", function (d) {
+            return valueScale(Number(d.value) / 1000000) + 50;
+        });
+        p.attr("cy", function (d) {
+            return ageScale(d.age); //同上
+        });
+    }

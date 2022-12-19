@@ -122,6 +122,24 @@
     <div class="comparison">
       <div class="flex-container2">
         <input type="search" name="searchComNation" placeholder="国名">
+        <div class="flex-container1">
+          <div class="flex-container3">
+            <label>
+              <input type="radio" name="searchYearCom" value="2010">2010
+            </label>
+            <label>
+              <input type="radio" name="searchYearCom" value="2014">2014
+            </label>
+          </div>
+          <div class="flex-container3">
+            <label>
+              <input type="radio" name="searchYearCom" value="2018">2018
+            </label>
+            <label>
+              <input type="radio" name="searchYearCom" value="2022">2022
+            </label>
+          </div>
+        </div>
         <input type="submit" name="submitCom" value="重ねる">
         <input type="submit" name="submitCom_del" value="重ねない">
       </div>
@@ -137,11 +155,13 @@
       });
       var nation = decodeURIComponent(queries[0]);
       var year = Number(queries[1]);
-      var comparison_nation = "";
-      if (queries.length === 3){
+      var comparison_nation = nation;
+      var comparison_year = year;
+      if (queries.length === 4){
         comparison_nation =  decodeURIComponent(queries[2]);
+        comparison_year = Number(queries[3]);
       }
-      // console.log(comparison_nation)
+      console.log(comparison_nation, comparison_year)
 
       var title = d3
         .select(".title")
@@ -184,18 +204,25 @@
             }
         }
         window.location.href = `./subpage.html?nation=${nation}&year=${year}`;
-        // window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${nation}&year=${year}`;
       });
 
       let searchComNation = document.querySelector(`input[name='searchComNation']`);
+      let searchYearCom = document.getElementsByName('searchYearCom');
       let submitCom = document.querySelector(`input[name='submitCom']`);
       let submitCom_del = document.querySelector(`input[name='submitCom_del']`);
       submitCom.addEventListener('click', function (event) {
         if (searchComNation.value !== ""){
           comparison_nation = searchComNation.value;
         }
-        window.location.href = `./subpage.html?nation=${nation}&year=${year}&comparison_nation=${comparison_nation}`;
+        let len = searchYearCom.length;
+        for (let i = 0; i < len; i++){
+            if (searchYearCom.item(i).checked){
+                comparison_year = Number(searchYearCom.item(i).value);
+            }
+        }
+        window.location.href = `./subpage.html?nation=${nation}&year=${year}&comparison_nation=${comparison_nation}&comparison_year=${comparison_year}`;
       });
+
       submitCom_del.addEventListener('click', function (event) {
         window.location.href = `./subpage.html?nation=${nation}&year=${year}`;
       });
