@@ -193,7 +193,8 @@
     .on("click", function(event,d){
         selected_nation = d[0];
         selected_year = YearScale_inv(this.cx.animVal.value);
-        window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${selected_nation}&year=${selected_year}`;
+        window.location.href = `./subpage.html?nation=${selected_nation}&year=${selected_year}`;
+        // window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${selected_nation}&year=${selected_year}`;
     })
     } 
 

@@ -68,7 +68,8 @@
       <div id="flex-container2">
         <div id="flex-container1">
           <div id="flex-container3">
-            <a href="http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/home.html">メインページへ戻る</a>
+            <a href="./home.html">メインページへ戻る</a>
+            <!-- <a href="http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/home.html">メインページへ戻る</a> -->
             <input type="search" name="searchNation" placeholder="国名">
             <div id="flex-container1">
               <div id="flex-container3">
@@ -151,7 +152,8 @@
                 year = Number(searchYear.item(i).value);
             }
         }
-        window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${nation}&year=${year}`;
+        window.location.href = `./subpage.html?nation=${nation}&year=${year}`;
+        // window.location.href = `http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/subpage.html?nation=${nation}&year=${year}`;
       });
 
     </script>
