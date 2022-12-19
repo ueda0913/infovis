@@ -69,6 +69,15 @@
     var region_dist = [{sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}];
 
     d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
+      function selection_0(a){
+        if(a == 0){
+          return 0;
+        }
+        else{
+          return 1;
+        }
+      }
+
       data.forEach(function (d) {
         region_dist[parseInt(d.region_num)].sum += parseFloat(d.distance);
         region_dist[parseInt(d.region_num)].num += 1;
@@ -79,9 +88,10 @@
           "distance": parseFloat(d.distance),
           "national_flag": d.national_flag,
           "surporter":d.surporter,
-          "x": width/4 + width/2 * Math.random(),
-          "y": height/4 + width/2 * Math.random(),
-          "r": d.surporter
+          "x": width/4 * selection_0(i) + width/2 * Math.random(),
+          "y": height/4 * selection_0(i) + width/2 * Math.random(),
+          "r": d.surporter,
+          "gdp": d.GDP_pp
         });
       });
 
@@ -127,13 +137,14 @@
             .style("visibility", "visible")
             .html(function(){
               if(d.name == "スイス"){
-                return d.name + "<br>" + `<img src=${d.national_flag}  width="40" height="40" >`;
+                return d.name + "<br>" + "一人当たりGDP" + d.gdp + "<br>" + `<img src=${d.national_flag}  width="40" height="40" >`;
               }
               else{
-                return d.name + "<br>" + `<img src=${d.national_flag}  width="65" height="40" >`
+                return d.name + "<br>" + "一人当たりGDP" + d.gdp + "<br>"+ `<img src=${d.national_flag}  width="65" height="40" >`
               }
-            })
+          
         })
+      })
         .on("mousemove", function (event, d, i) {
           tooltip
             .style("top", (event.pageY - 20) + "px")
@@ -160,14 +171,14 @@
         .force("link",
           d3.forceLink()
             .distance(function (d) { return d.l; })
-            .strength(0.03)
+            .strength(1)
             .iterations(16))
         .force("collide",
           d3.forceCollide()
             .radius(function (d) { return d.r; })
             .strength(0.7)
             .iterations(16))
-        .force("charge", d3.forceManyBody().strength(-75))
+        .force("charge", d3.forceManyBody().strength(-30))
         .force("x", d3.forceX().strength(0.1).x(function (d) { return   width / 2}))
         .force("y", d3.forceY().strength(0.1).y(function (d) { return  height / 2}));
 
@@ -251,7 +262,7 @@
           var id = setTimeout(waitFunc, 1000);
 
        }
-       sleep(1.5, function() {
+       sleep(3, function() {
         Create_border_circle()
        });
         
@@ -356,6 +367,7 @@
 */
    
 })
+
   </script>
 </body>
 

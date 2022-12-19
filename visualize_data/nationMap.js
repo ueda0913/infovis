@@ -16,7 +16,8 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
       "surporter": parseFloat(d.surporter),
       "x": width[2] / 4 + width[2] / 2 * Math.random(),
       "y": height[2] / 4 + width[2] / 2 * Math.random(),
-      "r": parseFloat(d.surporter)
+      "r": parseFloat(d.surporter),
+      "gdp": d.GDP_pp
     });
   });
   console.log(nodesData);
@@ -64,10 +65,10 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
         .style("visibility", "visible")
         .html(function () {
           if (d.name == "スイス") {
-            return d.name + "<br>" + `<img src=${d.national_flag}  width="40" height="40" >`;
+            return d.name + "<br>" + "開催国との距離: " + d.distance + "(km)<br>" + "一人当たりGDP: " + d.gdp + "($)<br>" + `<img src=${d.national_flag}  width="40" height="40" >`;
           }
           else {
-            return d.name + "<br>" + `<img src=${d.national_flag}  width="65" height="40" >`
+            return d.name + "<br>" + "開催国との距離: " + d.distance + "(km)<br>" + "一人当たりGDP: " + d.gdp + "($)<br>" + `<img src=${d.national_flag}  width="65" height="40" >`
           }
         })
     })
@@ -148,17 +149,6 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
     def_border_circle
       .style("visibility", "visible")
     // .style("pointer-events", "none")
-    if (d.index !== 0) {
-      toolbox
-        .style("visibility", "visible")
-        .html(
-          "国名 : " +
-          d.name +
-          "<br>開催国との距離 : " +
-          d.distance + "(km)"
-        );
-
-    }
   }
 
 
