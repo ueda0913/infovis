@@ -13,6 +13,13 @@ d3.csv(`../fetch_data/TwitterData/adjectiveNumber/AdjectiveNum-${year}.csv`).the
         .attr("height", 240)
         .attr("y", 5)
         .attr("x", 10);
+
+    Twitter
+        .append("image")
+        .attr("xlink:href", "twitter_logo.png")
+        .attr("width", 50)
+        .attr("y", 5)
+        .attr("x", (width[1]-60));
     
     var radius = Math.min((width[1]-480), height[1]) / 2 - 10;
     var color = d3.scaleSequential(d3.interpolateRainbow).domain([0, 20]);
@@ -65,4 +72,13 @@ d3.csv(`../fetch_data/TwitterData/adjectiveNumber/AdjectiveNum-${year}.csv`).the
                 return;
             }
         });
+    
+    Twitter
+        .append("text")
+        .attr("x", ((width[1]-480)/2+480))
+        .attr("y", (height[1]- 40))
+        .attr("font-size", "8px")
+        .attr("width", 50)
+        .attr("text-anchor", "middle")
+        .text(`${nation}と他の出場国のtweet数`)
 })

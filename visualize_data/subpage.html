@@ -32,7 +32,7 @@
       -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
       visibility: hidden;
-      top: 50px;
+      top: 30px;
       left: 300px;
     }
     .tooltip2 {
@@ -57,23 +57,23 @@
       width: auto;
       height: auto;
     }
-    #marketValue{
+    .marketValue{
       background-color:lightgray;
     }
-    #flex-container1{
+    .flex-container1{
       display: flex;
       flex-flow: row wrap;
       justify-content: space-around;
       align-content: space-around;
     }
-    #flex-container2{
+    .flex-container2{
       display: flex;
       flex-flow: column wrap;
       justify-content: space-around;
       align-content: space-around;
       align-items: flex-end;
     }
-    #flex-container3{
+    .flex-container3{
       display: flex;
       flex-flow: column wrap;
       justify-content: flex-start;
@@ -87,7 +87,7 @@
       line-height: 50px; 
       display: block;
     }
-    #title{
+    .title{
       border: none;
       font-size: larger;
       font-weight: bolder;
@@ -95,16 +95,15 @@
   </style>
 
   <body>
-    <div id="title"></div>
-    <div id="flex-container1">
-      <div id="flex-container2">
-        <div id="flex-container1">
-          <div id="flex-container3">
+    <div class="title"></div>
+    <div class="flex-container1">
+      <div class="flex-container2">
+        <div class="flex-container1">
+          <div class="flex-container3">
             <a href="./home.html">メインページへ戻る</a>
-            <!-- <a href="http://127.0.0.1:8887/B-FairWeatherSoccerFan/visualize_data/home.html">メインページへ戻る</a> -->
             <input type="search" name="searchNation" placeholder="国名">
-            <div id="flex-container1">
-              <div id="flex-container3">
+            <div class="flex-container1">
+              <div class="flex-container3">
                 <label>
                   <input type="radio" name="searchYear" value="2010">2010
                 </label>
@@ -115,7 +114,7 @@
                   <input type="radio" name="searchYear" value="2018">2018
                 </label>
               </div>
-              <div id="flex-container3">
+              <div class="flex-container3">
                 <label>
                   <input type="radio" name="searchYear" value="2022">2022
                 </label>
@@ -126,11 +125,11 @@
             </div>
             <input type="submit" name="submit" value="移動">
           </div>
-          <div id="nationMap"></div>
+          <div class="nationMap"></div>
         </div>
-        <div id="Twitter"></div>
+        <div class="Twitter"></div>
       </div>
-      <div id="marketValue"></div>
+      <div class="marketValue"></div>
     </div>
     <script type="text/javascript">
       var width = [630, 630, 400]; //window_size
@@ -145,26 +144,26 @@
       var year = Number(queries[1]);
 
       var title = d3
-        .select("#title")
+        .select(".title")
         .append("div")
         .text(`${year} ${nation}代表の詳細`)
 
       var nationMap = d3
-        .select("#nationMap") //ここをid名に変える#を前につける
+        .select(".nationMap") //ここをclass名に変える#を前につける
         .append("div")
         .append("svg")
         .attr("width", width[2])
         .attr("height", height[2]);
 
       var Twitter = d3
-        .select("#Twitter") //ここをid名に変える#を前につける
+        .select(".Twitter") //ここをclass名に変える#を前につける
         .append("div")
         .append("svg")
         .attr("width", width[1])
         .attr("height", height[1]);
 
       var marketValue = d3
-        .select("#marketValue") //ここをid名に変える#を前につける
+        .select(".marketValue") //ここをclass名に変える#を前につける
         .append("div")
         .append("svg")
         .attr("width", width[0])
