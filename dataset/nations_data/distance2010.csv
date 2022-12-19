@@ -1,18 +1,18 @@
-﻿nation,national_flag,distance,region,region_num,surporter
-南アフリカ共和国,https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Flag_of_South_Africa.svg/1280px-Flag_of_South_Africa.svg.png,0 ,アフリカ,0,7
-アメリカ合衆国,https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/1920px-Flag_of_the_United_States.svg.png,13043 ,北中米カリブ,5,7
-アルゼンチン,https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/1280px-Flag_of_Argentina.svg.png,8138 ,南米,3,7
-イングランド,https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_England.svg/1920px-Flag_of_England.svg.png,9035 ,ヨーロッパ,1,7
-ウルグアイ,https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Flag_of_Uruguay.svg/1280px-Flag_of_Uruguay.svg.png,7925 ,南米,3,7
-オランダ,https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/1280px-Flag_of_the_Netherlands.svg.png,8987 ,ヨーロッパ,1,7
-ガーナ,https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Flag_of_Ghana.svg/1280px-Flag_of_Ghana.svg.png,4641 ,アフリカ,4,7
-スペイン,https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/1280px-Flag_of_Spain.svg.png,8071 ,ヨーロッパ,1,7
-スロバキア,https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Flag_of_Slovakia.svg/1280px-Flag_of_Slovakia.svg.png,8306 ,ヨーロッパ,1,7
-チリ,https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Flag_of_Chile.svg/1280px-Flag_of_Chile.svg.png,9224 ,南米,3,7
-ドイツ,https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1920px-Flag_of_Germany.svg.png,8831 ,ヨーロッパ,1,7
-パラグアイ,https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Flag_of_Paraguay.svg/1920px-Flag_of_Paraguay.svg.png,8440 ,南米,3,7
-ブラジル,https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/1280px-Flag_of_Brazil.svg.png,7900 ,南米,3,7
-ポルトガル,https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/1280px-Flag_of_Portugal.svg.png,8160 ,ヨーロッパ,1,7
-メキシコ,https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Flag_of_Mexico.svg/1920px-Flag_of_Mexico.svg.png,14611 ,北中米カリブ,5,7
-韓国,https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/1280px-Flag_of_South_Korea.svg.png,12462 ,アジア,2,7
-日本,https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/1280px-Flag_of_Japan.svg.png,13517 ,アジア,2,7
+﻿nation,national_flag,distance,region,region_num,surporter,GDP_pp,GDP
+南アフリカ共和国,https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Flag_of_South_Africa.svg/1280px-Flag_of_South_Africa.svg.png,0,アフリカ,0,7,,
+アメリカ合衆国,https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/1920px-Flag_of_the_United_States.svg.png,13043,北中米カリブ,5,12.1465,48586,15048975
+アルゼンチン,https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/1280px-Flag_of_Argentina.svg.png,8138,南米,3,2.60325,10413,424729
+イングランド,https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_England.svg/1920px-Flag_of_England.svg.png,9035,ヨーロッパ,1,9.933,39732,2493557
+ウルグアイ,https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Flag_of_Uruguay.svg/1280px-Flag_of_Uruguay.svg.png,7925,南米,3,3.225,12900,43816
+オランダ,https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/1280px-Flag_of_the_Netherlands.svg.png,8987,ヨーロッパ,1,12.7915,51166,848073
+ガーナ,https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Flag_of_Ghana.svg/1280px-Flag_of_Ghana.svg.png,4641,アフリカ,4,0.43925,1757,43327
+スペイン,https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/1280px-Flag_of_Spain.svg.png,8071,ヨーロッパ,1,7.64175,30567,1423270
+スロバキア,https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Flag_of_Slovakia.svg/1280px-Flag_of_Slovakia.svg.png,8306,ヨーロッパ,1,4.21475,16859,90875
+チリ,https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Flag_of_Chile.svg/1280px-Flag_of_Chile.svg.png,9224,南米,3,3.17775,12711,216899
+ドイツ,https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1920px-Flag_of_Germany.svg.png,8831,ヨーロッパ,1,10.595,42380,3402444
+パラグアイ,https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Flag_of_Paraguay.svg/1920px-Flag_of_Paraguay.svg.png,8440,南米,3,1.0825,4330,27129
+ブラジル,https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/1280px-Flag_of_Brazil.svg.png,7900,南米,3,2.83325,11333,2208704
+ポルトガル,https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/1280px-Flag_of_Portugal.svg.png,8160,ヨーロッパ,1,5.63475,22539,238308
+メキシコ,https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Flag_of_Mexico.svg/1920px-Flag_of_Mexico.svg.png,14611,北中米カリブ,5,2.32475,9299,1057801
+韓国,https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/1280px-Flag_of_South_Korea.svg.png,12462,アジア,2,5.76925,23077,1143568
+日本,https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/1280px-Flag_of_Japan.svg.png,13517,アジア,2,11.284,45136,5759072
