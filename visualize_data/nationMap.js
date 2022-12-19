@@ -3,12 +3,12 @@ var nodesData = [];
 var linksData = [];
 var region_dist = [{ sum: 0.0, num: 0 }, { sum: 0.0, num: 0 }, { sum: 0.0, num: 0 }, { sum: 0.0, num: 0 }, { sum: 0.0, num: 0 }, { sum: 0.0, num: 0 }];
 
-d3.csv(`../dataset/nations_data/distance${year}.csv`/*`distance${year}.csv`*/).then(function (data) {
-  data.forEach(function (d) {
+d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
+  data.forEach(function (d, index) {
     region_dist[parseInt(d.region_num)].sum += parseFloat(d.distance);
     region_dist[parseInt(d.region_num)].num += 1;
     nodesData.push({
-      "index": i,
+      "index": index,
       "group": parseInt(d.region_num),
       "name": d.nation,
       "distance": parseFloat(d.distance),
@@ -39,7 +39,11 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`/*`distance${year}.csv`*/).t
     .enter()
     .append("line")
     .attr("stroke-width", 1)
-    .attr("stroke", "black");
+    .attr("stroke", function (d) {
+      target_node = nodesData.find((tar) => tar.name == nation);
+      return (target_node.index == d.target) ? "tomato" : "black";
+    })
+    ;
 
   var color = d3.scaleOrdinal()
     .domain([0, 1, 2, 3, 4, 5])
@@ -83,8 +87,6 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`/*`distance${year}.csv`*/).t
   var y = d3.scaleOrdinal()
     .domain([0, 1, 2, 3, 4, 5])
     .range([0, 0.0 * region_dist[1].sum / region_dist[1].num, 0.95 * region_dist[2].sum / region_dist[2].num, 0.58 * region_dist[3].sum / region_dist[3].num, -0.58 * region_dist[4].sum / region_dist[4].num, -0.95 * region_dist[5].sum / region_dist[5].num])
-
-  var guide
 
   // 3. forceSimulation設定
   var simulation = d3.forceSimulation()
