@@ -20,7 +20,6 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
       "gdp": d.GDP_pp
     });
   });
-  console.log(nodesData);
 
   var i = 0;  // 中心ノード
   for (var j = i + 1; j < nodesData.length; j++) {
@@ -174,7 +173,7 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
     var id = setTimeout(waitFunc, 1000);
 
   }
-  sleep(1.5, function () {
+  sleep(3.2, function () {
     Create_border_circle()
   });
 
