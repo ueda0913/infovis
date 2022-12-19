@@ -44,13 +44,13 @@
 
 
     var worldcup_data = [];
-    var year = [2010,2014,2018];
+    var year = [2010,2014,2018,2022];
     //グラフの軸
     var RankScale = d3.scaleLinear().domain([1, 22]).range([0, height-20]);
-    var YearScale = d3.scaleLinear().domain([2008,2028]).range([0, width-60]);
-    var YearScale_inv = d3.scaleLinear().domain([20+offset, offset+width-40]).range([2008,2028]);
+    var YearScale = d3.scaleLinear().domain([2008,2024]).range([0, width-60]);
+    var YearScale_inv = d3.scaleLinear().domain([20+offset, offset+width-40]).range([2008,2024]);
     var RankAxis = d3.axisLeft(RankScale).tickValues([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
-    var YearAxis = d3.axisBottom(YearScale).tickValues([2010,2014,2018,2022,2026]);
+    var YearAxis = d3.axisBottom(YearScale).tickValues([2010,2014,2018,2022]);
 
     
   
@@ -110,7 +110,7 @@
       
       data.forEach(function(d)
       {
-      worldcup_data.push({name: d.nation, result: [d.res2010,d.res2014,d.res2018] ,flag: d.national_flag});
+      worldcup_data.push({name: d.nation, result: [d.res2010,d.res2014,d.res2018,d.res2022] ,flag: d.national_flag});
       });
       Creategraph();
   }); 
