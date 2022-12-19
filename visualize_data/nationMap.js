@@ -1,15 +1,15 @@
 //svg
     // 1. 描画用のデータ準備
-    var width = 400;
-    var height = 400;
+    // var width = 400;
+    // var height = 400;
     
-    var nationMap = d3.select("body")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height);
+    // var nationMap = d3.select("body")
+    //   .append("svg")
+    //   .attr("width", width)
+    //   .attr("height", height);
     //最後消す
-    var nation = "アルゼンチン";
-    var year = 2022;
+    // var nation = "アルゼンチン";
+    // var year = 2022;
     //
 
     var toolbox = d3.select("body").append("div").attr("class", "toolbox");
@@ -17,7 +17,7 @@
     var linksData = [];
     var region_dist = [{sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}, {sum: 0.0, num: 0}];
 
-    d3.csv(/*`../dataset/nations_data/distance${year}.csv`*/`distance${year}.csv`).then(function (data) {
+    d3.csv(`../dataset/nations_data/distance${year}.csv`/*`distance${year}.csv`*/).then(function (data) {
       data.forEach(function (d) {
         region_dist[parseInt(d.region_num)].sum += parseFloat(d.distance);
         region_dist[parseInt(d.region_num)].num += 1;
@@ -28,8 +28,8 @@
           "distance": parseFloat(d.distance),
           "national_flag": d.national_flag,
           "surporter":parseFloat(d.surporter),
-          "x": width/4 + width/2 * Math.random(),
-          "y": height/4 + width/2 * Math.random(),
+          "x": width[2]/4 + width[2]/2 * Math.random(),
+          "y": height[2]/4 + width[2]/2 * Math.random(),
           "r": parseFloat(d.surporter)
         });
       });
@@ -59,7 +59,7 @@
         .domain([0, 1, 2, 3, 4, 5])
         .range(["white", "green", "black", "red", "blue", "yellow"])
 
-      var tooltip = d3.select("body").append("div").attr("class", "tooltip");
+      var tooltip2 = d3.select("body").append("div").attr("class", "tooltip2");
       var node = d3.select("svg")
         .selectAll("circle")
         .data(nodesData)
@@ -73,7 +73,7 @@
           //.on("drag", dragged)
           //.on("end", dragended))
         .on("mouseover", function (event, d, i) {
-          tooltip
+          tooltip2
             .style("visibility", "visible")
             .html(function(){
               if(d.name == "スイス"){
@@ -85,12 +85,12 @@
             })
         })
         .on("mousemove", function (event, d, i) {
-          tooltip
+          tooltip2
             .style("top", (event.pageY - 20) + "px")
             .style("left", (event.pageX + 10) + "px");
         })
         .on("mouseout", function (event, d, i) {
-          tooltip.style("visibility", "hidden");
+          tooltip2.style("visibility", "hidden");
         });
 
       var x = d3.scaleOrdinal()
@@ -116,8 +116,8 @@
             .strength(0.7)
             .iterations(16))
         .force("charge", d3.forceManyBody().strength(-250))
-        .force("x", d3.forceX().strength(0.1).x(function (d) { return   width / 2}))
-        .force("y", d3.forceY().strength(0.1).y(function (d) { return  height / 2}));
+        .force("x", d3.forceX().strength(0.1).x(function (d) { return   width[2] / 2}))
+        .force("y", d3.forceY().strength(0.1).y(function (d) { return  height[2] / 2}));
 
       simulation
         .nodes(nodesData)
