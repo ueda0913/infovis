@@ -8,7 +8,7 @@ var playerData = [];
 //軸を最大に合わせて調節すると比較にならない？
 d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
   data.forEach(function(d){
-    if (d.country == nation){
+    if (d.country == nation || d.country == nation.substr(0, 4)){
       playerData.push({
         name: d.name,
         position: d.position,
