@@ -24,16 +24,27 @@
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
       visibility: hidden;
     }
+
+    #title{
+      border: none;
+      font-size: x-large;
+      font-weight: bold;
+    }
   </style>
 </head>
 
 <body>
+  <div id="title"></div>
   <script type="text/javascript">
     var selected_nation;
     var selected_year;
     var main_flag=1;
 
-  
+    var title = d3
+      .select("#title")
+      .append("div")
+      .text("ワールドカップ決勝トーナメント出場国まとめ")
+
     var width = 1300;
     var height = 600;
     var offset = 40; //固定
