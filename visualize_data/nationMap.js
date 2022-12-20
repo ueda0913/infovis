@@ -38,12 +38,14 @@ d3.csv(`../dataset/nations_data/distance${year}.csv`).then(function (data) {
     .data(linksData)
     .enter()
     .append("line")
-    .attr("stroke-width", 1)
+    .attr("stroke-width", function (d) {
+      target_node = nodesData.find((tar) => tar.name == nation);
+      return (target_node.index == d.target) ? 3 : 1;
+    })
     .attr("stroke", function (d) {
       target_node = nodesData.find((tar) => tar.name == nation);
       return (target_node.index == d.target) ? "tomato" : "black";
-    })
-    ;
+    });
 
   var color = d3.scaleOrdinal()
     .domain([0, 1, 2, 3, 4, 5])
