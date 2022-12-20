@@ -62,6 +62,7 @@ marketValue
 var valueCircle;
 var valueCircleCom;
 d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
+  console.log(comparisonData)
   data.forEach(function(d){
     if (d.country == nation || d.country == nation.substr(0, 4)){
       playerData.push({
@@ -129,7 +130,7 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
         })
         .call(position);
 
-    if (comparisonData.length !== 0){
+    if (year === comparison_year){
         valueCircleCom = marketValue
             .selectAll("polygon")
             .data(comparisonData)
@@ -207,8 +208,8 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
 
     if (!flag){
         marketValue.append("text")
-            .attr("x", 450)
-            .attr("y", 120)
+            .attr("x", 400)
+            .attr("y", 130)
             .text(function(){
                 if (comparisonData.length !== 0){
                     return `参照国：${comparison_nation}(${comparison_year})`;
@@ -239,6 +240,7 @@ d3.csv(`../dataset/player_worth/playerworth${year-1}.csv`).then(function(data){
 
 if (flag){
     d3.csv(`../dataset/player_worth/playerworth${comparison_year-1}.csv`).then(function(d2){
+        console.log(comparisonData)
         d2.forEach(function(d4){
             if (d4.country == comparison_nation || d4.country == comparison_nation.substr(0, 4)){
                 comparisonData.push({
@@ -299,9 +301,10 @@ if (flag){
             .call(position_comparison);
 
         console.log(comparisonData.length)
+        console.log(valueCircleCom)
         marketValue.append("text")
-            .attr("x", 450)
-            .attr("y", 120)
+            .attr("x", 400)
+            .attr("y", 130)
             .text(function(){
                 if (comparisonData.length !== 0){
                     return `参照国：${comparison_nation} (${comparison_year})`;
@@ -311,45 +314,51 @@ if (flag){
             });
     
         });
-    }
+}
     
-    marketValue.call(
-        d3
-        .drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended)
-    );
-    
-    var drag_delta;
-    function dragstarted() {
-        drag_delta = 0;
-    }
-    function dragged(event){
-        var drag_threshold =  0.00000001 * valueScale_max ** 3;
-        drag_delta += event.dx;
-        if(drag_delta != 0){
-            var next_valueScale_max = valueScale_max - drag_delta * drag_threshold;
-            if(next_valueScale_max < 10) next_valueScale_max = 10;
-            else if(next_valueScale_max > 200) next_valueScale_max = 200;
-            valueScale_max = next_valueScale_max;
-            valueScale
-            .domain([0, valueScale_max]);
-            valueAxis = d3.axisBottom(valueScale).ticks(5, d3.format(",d"));
-            marketValue.selectAll(".valueAxis").call(valueAxis);
-            valueCircle.call(position)
+marketValue.call(
+    d3
+    .drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended)
+);
+
+var drag_delta;
+function dragstarted() {
+    drag_delta = 0;
+    console.log(valueCircleCom)
+}
+function dragged(event){
+    var drag_threshold =  0.00000001 * valueScale_max ** 3;
+    drag_delta += event.dx;
+    if(drag_delta != 0){
+        var next_valueScale_max = valueScale_max - drag_delta * drag_threshold;
+        if(next_valueScale_max < 10) next_valueScale_max = 10;
+        else if(next_valueScale_max > 200) next_valueScale_max = 200;
+        valueScale_max = next_valueScale_max;
+        valueScale
+        .domain([0, valueScale_max]);
+        valueAxis = d3.axisBottom(valueScale).ticks(5, d3.format(",d"));
+        marketValue.selectAll(".valueAxis").call(valueAxis);
+        valueCircle.call(position)
+        if (nation !== comparison_nation || year !== comparison_year){
+            //console.log(valueCircleCom)
             valueCircleCom.call(position_comparison);
         }
     }
-    function dragended() {};
+}
+function dragended() {};
 
-    function position_comparison(p) {
-        p.attr("transform", function(d){
-            return "translate(" + (valueScale(Number(d.value) / 1000000) + 50) + "," + ageScale(d.age) + ")";
-        });
-    }
+function position_comparison(p) {
+    //console.log(p)
+    p.attr("transform", function(d){
+        return "translate(" + (valueScale(Number(d.value) / 1000000) + 50) + "," + ageScale(d.age) + ")";
+    });
+}
 
     function position(p) {
+        //console.log(p)
         p.attr("cx", function (d) {
             return valueScale(Number(d.value) / 1000000) + 50;
         });
